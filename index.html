@@ -5,241 +5,303 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Google Cloud SA Interview Prep — AI/ML Course</title>
 <style>
-  :root {
-    --bg: #0d1117;
-    --bg2: #161b22;
-    --bg3: #1c2128;
-    --border: #30363d;
-    --text: #e6edf3;
-    --text2: #8b949e;
-    --blue: #4285F4;
-    --teal: #00bcd4;
-    --green: #3fb950;
-    --yellow: #d29922;
-    --red: #f85149;
-    --purple: #bc8cff;
-    --accent: #4285F4;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 16px; line-height: 1.6; }
-  
-  /* NAV */
-  .nav { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .nav-brand { font-size: 14px; font-weight: 600; color: var(--blue); display: flex; align-items: center; gap: 8px; }
-  .nav-score { font-size: 13px; color: var(--text2); }
-  .nav-score span { color: var(--teal); font-weight: 700; font-size: 16px; }
+/* DESIGN TOKENS */
+:root {
+  --blue: #4285F4;
+  --blue-light: #e8f0fe;
+  --blue-dark: #1a73e8;
+  --teal: #00897B;
+  --teal-light: #e0f2f1;
+  --green: #1e8e3e;
+  --green-light: #e6f4ea;
+  --yellow: #f9ab00;
+  --yellow-light: #fef7e0;
+  --red: #d93025;
+  --red-light: #fce8e6;
+  --purple: #7b2fbe;
+  --purple-light: #f3e8fd;
+  --sb-bg: #1e2746;
+  --sb-hover: #2a3460;
+  --sb-active: rgba(66,133,244,0.16);
+  --sb-text: #e8eaed;
+  --sb-muted: #8a8fa3;
+  --sb-border: rgba(255,255,255,0.08);
+  --sb-width: 240px;
+  --main-bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #202124;
+  --text2: #5f6368;
+  --border: #dadce0;
+  --nav-bg: #202124;
+  --nav-h: 56px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 15px; line-height: 1.65; color: var(--text); background: var(--main-bg); }
+button { cursor: pointer; font-family: inherit; }
 
-  /* HOME */
-  .home { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
-  .home-header { text-align: center; margin-bottom: 40px; }
-  .home-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-  .home-header p { color: var(--text2); font-size: 15px; }
-  .readiness-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center; }
-  .readiness-label { font-size: 13px; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .readiness-score { font-size: 56px; font-weight: 800; color: var(--teal); line-height: 1; }
-  .readiness-bar { height: 6px; background: var(--bg3); border-radius: 3px; margin-top: 16px; overflow: hidden; }
-  .readiness-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--teal)); border-radius: 3px; transition: width 0.6s ease; }
-  .readiness-sub { font-size: 13px; color: var(--text2); margin-top: 8px; }
+/* TOP BAR */
+.top-bar { position: sticky; top: 0; z-index: 200; background: var(--nav-bg); height: var(--nav-h); display: flex; align-items: center; padding: 0 20px; gap: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+.top-bar-brand { display: flex; align-items: center; gap: 10px; color: #e8eaed; font-size: 14px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+.top-bar-progress { flex: 1; display: flex; align-items: center; gap: 12px; }
+.top-bar-progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+.top-bar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #00bcd4); border-radius: 2px; transition: width 0.5s ease; width: 0%; }
+.top-bar-pct { color: #9aa0a6; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+.top-bar-score { background: rgba(66,133,244,0.18); color: #7baeff; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
 
-  .module-grid { display: flex; flex-direction: column; gap: 12px; }
-  .module-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; cursor: pointer; transition: border-color 0.2s, transform 0.1s; display: flex; align-items: center; gap: 16px; }
-  .module-card:hover { border-color: var(--blue); transform: translateY(-1px); }
-  .module-card.locked { opacity: 0.5; cursor: not-allowed; }
-  .module-card.completed { border-color: var(--green); }
-  .module-num { width: 40px; height: 40px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--text2); flex-shrink: 0; }
-  .module-card.completed .module-num { background: rgba(63,185,80,0.15); border-color: var(--green); color: var(--green); }
-  .module-card.active .module-num { background: rgba(66,133,244,0.15); border-color: var(--blue); color: var(--blue); }
-  .module-info { flex: 1; min-width: 0; }
-  .module-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
-  .module-meta { font-size: 13px; color: var(--text2); }
-  .module-status { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-  .status-completed { color: var(--green); }
-  .status-locked { color: var(--text2); }
-  .status-available { color: var(--blue); }
-  .status-inprogress { color: var(--yellow); }
+/* LAYOUT */
+.layout { display: flex; min-height: calc(100vh - var(--nav-h)); }
 
-  /* MODULE VIEW */
-  .module-view { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
-  .module-header { margin-bottom: 32px; }
-  .back-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s, border-color 0.2s; }
-  .back-btn:hover { color: var(--text); border-color: var(--text2); }
-  .module-badge { display: inline-block; background: rgba(66,133,244,0.15); color: var(--blue); padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-  .module-view h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-  .module-view .subtitle { color: var(--text2); font-size: 15px; }
+/* SIDEBAR */
+.sidebar { width: var(--sb-width); flex-shrink: 0; background: var(--sb-bg); min-height: calc(100vh - var(--nav-h)); position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+.sb-section-label { padding: 20px 16px 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sb-muted); }
+.sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; color: var(--sb-text); font-size: 13px; transition: background 0.15s; cursor: pointer; border: none; background: none; width: 100%; text-align: left; line-height: 1.35; }
+.sb-item:hover { background: var(--sb-hover); }
+.sb-item.sb-active { background: var(--sb-active); color: #7baeff; }
+.sb-item.sb-locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.sb-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; color: var(--sb-muted); }
+.sb-item.sb-active .sb-num { background: var(--blue); color: white; }
+.sb-item.sb-complete .sb-num { background: var(--green); color: white; }
+.sb-divider { height: 1px; background: var(--sb-border); margin: 8px 16px; }
+.sb-back { display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: var(--sb-muted); font-size: 13px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--sb-border); transition: color 0.15s; }
+.sb-back:hover { color: var(--sb-text); }
+.sb-module-info { padding: 14px 16px 10px; }
+.sb-module-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--blue); margin-bottom: 5px; }
+.sb-module-name { font-size: 13px; font-weight: 600; color: var(--sb-text); line-height: 1.4; }
+.sb-toc-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 16px 6px 24px; color: var(--sb-muted); font-size: 12px; line-height: 1.4; }
+.sb-toc-bullet { width: 5px; height: 5px; border-radius: 50%; background: var(--sb-muted); flex-shrink: 0; margin-top: 5px; }
 
-  /* AUDIO PLAYER */
-  .audio-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
-  .audio-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--blue), var(--teal)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .audio-icon svg { fill: white; }
-  .audio-info { flex: 1; min-width: 0; }
-  .audio-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
-  .audio-desc { font-size: 14px; color: var(--text); margin-top: 2px; }
-  audio { width: 100%; margin-top: 8px; }
-  audio::-webkit-media-controls-panel { background: var(--bg3); }
+/* MAIN CONTENT */
+.main-content { flex: 1; min-width: 0; padding: 32px 40px 80px; }
 
-  /* CONTENT SECTIONS */
-  .section { margin-bottom: 36px; }
-  .section h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .section h2 .section-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--blue); border-radius: 50%; font-size: 12px; color: white; font-weight: 700; flex-shrink: 0; }
-  .section h3 { font-size: 15px; font-weight: 600; margin: 18px 0 8px; color: var(--teal); }
-  .section p { color: var(--text); margin-bottom: 12px; font-size: 15px; }
-  .section ul, .section ol { margin: 8px 0 12px 20px; }
-  .section li { margin-bottom: 6px; font-size: 15px; color: var(--text); }
-  .section code { background: var(--bg3); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 13px; color: var(--teal); }
+/* HOME: HERO */
+.hero-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 40px; margin-bottom: 28px; display: flex; align-items: flex-start; gap: 36px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+.hero-left { flex: 1; min-width: 0; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--blue-light); color: var(--blue-dark); padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 14px; }
+.hero-title { font-size: 26px; font-weight: 700; margin-bottom: 10px; color: var(--text); line-height: 1.25; }
+.hero-subtitle { color: var(--text2); font-size: 15px; margin-bottom: 20px; }
+.hero-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; flex-wrap: wrap; }
+.meta-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--main-bg); color: var(--text2); padding: 5px 12px; border-radius: 20px; font-size: 12.5px; border: 1px solid var(--border); }
+.hero-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; border: none; transition: background 0.15s; box-shadow: 0 2px 8px rgba(66,133,244,0.35); }
+.hero-cta:hover { background: var(--blue-dark); }
+.hero-right { flex-shrink: 0; text-align: center; }
+.ring-wrap { position: relative; width: 116px; height: 116px; }
+.ring-wrap svg { width: 116px; height: 116px; transform: rotate(-90deg); }
+.ring-track { fill: none; stroke: #e8eaed; stroke-width: 8; }
+.ring-fill { fill: none; stroke: var(--blue); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 0 327; transition: stroke-dasharray 0.7s ease; }
+.ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.ring-score { font-size: 22px; font-weight: 800; color: var(--blue); line-height: 1; }
+.ring-label { font-size: 9px; color: var(--text2); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.ring-sub { font-size: 12px; color: var(--text2); margin-top: 8px; }
 
-  /* CALLOUT BOXES */
-  .callout { border-radius: 8px; padding: 14px 16px; margin: 16px 0; border-left: 3px solid; }
-  .callout-scott { background: rgba(188,140,255,0.08); border-color: var(--purple); }
-  .callout-scott .callout-label { color: var(--purple); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .callout-google { background: rgba(66,133,244,0.08); border-color: var(--blue); }
-  .callout-google .callout-label { color: var(--blue); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .callout-warn { background: rgba(210,153,34,0.08); border-color: var(--yellow); }
-  .callout-warn .callout-label { color: var(--yellow); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .callout p { margin: 0; font-size: 14px; }
+/* HOME: MODULE CARDS */
+.home-section-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.home-section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.home-section-sub { font-size: 13px; color: var(--text2); }
+.module-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 10px; display: flex; align-items: center; gap: 18px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.module-card:hover { border-color: var(--blue); box-shadow: 0 2px 14px rgba(66,133,244,0.13); transform: translateY(-1px); }
+.mc-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+.mc-complete { border-left: 3px solid var(--green); }
+.mc-inprogress { border-left: 3px solid var(--blue); }
+.mc-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; background: var(--main-bg); color: var(--text2); border: 2px solid var(--border); }
+.mc-complete .mc-icon { background: var(--green-light); border-color: var(--green); color: var(--green); }
+.mc-inprogress .mc-icon { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+.mc-body { flex: 1; min-width: 0; }
+.mc-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.mc-desc { font-size: 13px; color: var(--text2); }
+.mc-right { flex-shrink: 0; text-align: right; min-width: 96px; }
+.mc-duration { font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+.mc-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+.chip-locked { background: #f1f3f4; color: #9aa0a6; }
+.chip-available { background: var(--blue-light); color: var(--blue-dark); }
+.chip-inprogress { background: #fff3e0; color: #e65100; }
+.chip-complete { background: var(--green-light); color: var(--green); }
 
-  /* CODE BLOCK */
-  .code-block { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 12px 0; font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 13px; line-height: 1.5; overflow-x: auto; color: #a9b1d6; }
-  .code-block .kw { color: #bb9af7; }
-  .code-block .fn { color: #7aa2f7; }
-  .code-block .str { color: #9ece6a; }
-  .code-block .cm { color: #565f89; }
-  .code-block .num { color: #ff9e64; }
+/* BREADCRUMB */
+.breadcrumb { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.bc-item { font-size: 13px; color: var(--text2); }
+.bc-link { color: var(--blue); cursor: pointer; }
+.bc-link:hover { text-decoration: underline; }
+.bc-current { color: var(--text); font-weight: 500; }
+.bc-sep { color: #bdc1c6; font-size: 12px; }
 
-  /* COMPARISON TABLE */
-  .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-  .compare-table th { background: var(--bg3); color: var(--text2); text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
-  .compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  .compare-table tr:last-child td { border-bottom: none; }
-  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
-  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
-  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
-  .tag-blue { background: rgba(66,133,244,0.15); color: var(--blue); }
+/* MODULE HEADER */
+.mod-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-light); color: var(--blue-dark); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+.mod-h1 { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.25; }
+.mod-subtitle { color: var(--text2); font-size: 14px; margin-bottom: 28px; }
 
-  /* QUICK CHECK */
-  .quickcheck { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 20px 0; }
-  .quickcheck h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--teal); margin-bottom: 14px; font-weight: 700; }
-  .qc-question { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-  .qc-options { display: flex; flex-direction: column; gap: 8px; }
-  .qc-option { padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; transition: border-color 0.15s, background 0.15s; user-select: none; }
-  .qc-option:hover { border-color: var(--blue); background: rgba(66,133,244,0.05); }
-  .qc-option.correct { border-color: var(--green) !important; background: rgba(63,185,80,0.1); }
-  .qc-option.wrong { border-color: var(--red) !important; background: rgba(248,81,73,0.08); }
-  .qc-option.disabled { pointer-events: none; }
-  .qc-feedback { font-size: 13px; margin-top: 10px; padding: 8px 12px; border-radius: 6px; display: none; }
-  .qc-feedback.show { display: block; }
-  .qc-feedback.correct { background: rgba(63,185,80,0.1); color: var(--green); }
-  .qc-feedback.wrong { background: rgba(248,81,73,0.08); color: var(--red); }
-  .qc-next { margin-top: 12px; display: none; }
-  .qc-next.show { display: block; }
+/* KNOWLEDGE CHECK (N-BACK RECALL) */
+.recall-card { background: linear-gradient(135deg, #e0f7f4 0%, #e8f5e9 100%); border: 1px solid #b2dfdb; border-left: 4px solid var(--teal); border-radius: 12px; padding: 20px 22px; margin-bottom: 28px; }
+.recall-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.recall-badge { background: var(--teal); color: white; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; flex-shrink: 0; }
+.recall-from { font-size: 12px; color: #5f7367; }
+.recall-q { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
 
-  /* MODULE QUIZ */
-  .quiz-section { background: var(--bg2); border: 2px solid var(--blue); border-radius: 12px; padding: 24px; margin-top: 32px; }
-  .quiz-header { text-align: center; margin-bottom: 24px; }
-  .quiz-header h3 { font-size: 20px; font-weight: 700; }
-  .quiz-header p { color: var(--text2); font-size: 14px; margin-top: 4px; }
-  .quiz-question { margin-bottom: 24px; }
-  .quiz-question-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-  .quiz-option { padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; margin-bottom: 6px; transition: border-color 0.15s, background 0.15s; user-select: none; }
-  .quiz-option:hover:not(.disabled) { border-color: var(--blue); background: rgba(66,133,244,0.05); }
-  .quiz-option.selected { border-color: var(--blue); background: rgba(66,133,244,0.1); }
-  .quiz-option.correct { border-color: var(--green); background: rgba(63,185,80,0.1); }
-  .quiz-option.wrong { border-color: var(--red); background: rgba(248,81,73,0.08); }
-  .quiz-option.disabled { pointer-events: none; }
-  .quiz-btn { background: var(--blue); color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; transition: opacity 0.2s; }
-  .quiz-btn:hover { opacity: 0.9; }
-  .quiz-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .quiz-result { text-align: center; padding: 24px; display: none; }
-  .quiz-result.show { display: block; }
-  .quiz-result-score { font-size: 48px; font-weight: 800; margin-bottom: 8px; }
-  .quiz-result-score.pass { color: var(--green); }
-  .quiz-result-score.fail { color: var(--red); }
-  .quiz-result-msg { font-size: 16px; margin-bottom: 20px; }
-  .quiz-result-btn { background: var(--green); color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+/* AUDIO PLAYER */
+.audio-player { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 32px; display: flex; align-items: center; gap: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.audio-icon { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), #00bcd4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 10px rgba(66,133,244,0.3); }
+.audio-icon svg { fill: white; }
+.audio-info { flex: 1; min-width: 0; }
+.audio-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text2); margin-bottom: 2px; }
+.audio-title-text { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+audio { width: 100%; height: 32px; }
 
-  /* N-BACK RECALL */
-  .recall-card { background: rgba(188,140,255,0.06); border: 1px solid rgba(188,140,255,0.3); border-radius: 10px; padding: 20px; margin-bottom: 28px; }
-  .recall-header { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); font-weight: 700; margin-bottom: 14px; }
-  .recall-q { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+/* CONTENT SECTIONS */
+.section { margin-bottom: 40px; }
+.section h2 { font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.section h2 .section-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.section h3 { font-size: 15px; font-weight: 700; color: var(--teal); margin: 20px 0 10px; }
+.section p { color: var(--text); margin-bottom: 14px; font-size: 15px; }
+.section ul, .section ol { margin: 6px 0 14px 22px; }
+.section li { margin-bottom: 7px; font-size: 15px; color: var(--text); }
+.section code { background: #f1f3f4; border: 1px solid #dadce0; padding: 2px 7px; border-radius: 4px; font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-size: 13px; color: #c0392b; }
 
-  /* BUTTONS */
-  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.2s; }
-  .btn-primary { background: var(--blue); color: white; }
-  .btn-primary:hover { opacity: 0.85; }
-  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-outline:hover { border-color: var(--text2); }
-  .btn-success { background: var(--green); color: white; }
+/* CALLOUT BOXES */
+.callout { border-radius: 10px; padding: 15px 18px; margin: 18px 0; border-left: 4px solid; }
+.callout .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.callout p { margin: 0; font-size: 14px; line-height: 1.65; }
+.callout strong { font-weight: 700; }
+.callout-scott { background: var(--purple-light); border-color: var(--purple); }
+.callout-scott .callout-label { color: var(--purple); }
+.callout-google { background: var(--blue-light); border-color: var(--blue); }
+.callout-google .callout-label { color: var(--blue-dark); }
+.callout-warn { background: var(--yellow-light); border-color: var(--yellow); }
+.callout-warn .callout-label { color: #8c5700; }
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+/* CODE BLOCKS */
+.code-block { background: #1e2746; border: 1px solid #2d3a5c; border-radius: 10px; padding: 18px 20px; margin: 14px 0; font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-size: 13px; line-height: 1.65; overflow-x: auto; color: #cdd9f5; }
+.code-block .kw { color: #c792ea; }
+.code-block .fn { color: #82aaff; }
+.code-block .str { color: #c3e88d; }
+.code-block .cm { color: #546e8a; }
+.code-block .num { color: #f78c6c; }
 
-  /* HIDDEN */
-  .hidden { display: none !important; }
+/* COMPARISON TABLE */
+.compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.compare-table th { background: #f8f9fa; color: var(--text2); text-align: left; padding: 10px 14px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); font-weight: 600; }
+.compare-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: #fafbff; }
+.tag { display: inline-flex; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-red { background: var(--red-light); color: var(--red); }
+.tag-yellow { background: var(--yellow-light); color: #8c5700; }
+.tag-blue { background: var(--blue-light); color: var(--blue-dark); }
 
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .module-view { padding: 20px 14px 60px; }
-    .home { padding: 24px 14px; }
-    .home-header h1 { font-size: 22px; }
-    .readiness-score { font-size: 44px; }
-    .module-view h1 { font-size: 21px; }
-    .compare-table { font-size: 13px; }
-    .compare-table th, .compare-table td { padding: 8px 8px; }
-  }
+/* QUICK CHECKS */
+.quickcheck { background: #f8f9fa; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 22px 0; }
+.quickcheck h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--teal); margin-bottom: 12px; font-weight: 700; }
+.qc-question { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+.qc-options { display: flex; flex-direction: column; gap: 8px; }
+.qc-option { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 14px; background: white; color: var(--text); transition: border-color 0.15s, background 0.15s; user-select: none; }
+.qc-option:hover { border-color: var(--blue); background: var(--blue-light); }
+.qc-option.correct { border-color: var(--green) !important; background: var(--green-light); color: #0d6e2a; font-weight: 500; }
+.qc-option.wrong { border-color: var(--red) !important; background: var(--red-light); color: var(--red); }
+.qc-option.disabled { pointer-events: none; }
+.qc-feedback { font-size: 13px; margin-top: 10px; padding: 8px 12px; border-radius: 6px; display: none; font-weight: 500; }
+.qc-feedback.show { display: block; }
+.qc-feedback.correct { background: var(--green-light); color: var(--green); }
+.qc-feedback.wrong { background: var(--red-light); color: var(--red); }
 
-  /* PROGRESS INDICATOR */
-  .progress-steps { display: flex; gap: 6px; margin-bottom: 24px; }
-  .progress-step { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
-  .progress-step.done { background: var(--green); }
-  .progress-step.active { background: var(--blue); }
+/* QUIZ */
+.quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-top: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.quiz-header { text-align: center; margin-bottom: 28px; }
+.quiz-header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-light); color: var(--blue-dark); padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 10px; }
+.quiz-header h3 { font-size: 20px; font-weight: 700; color: var(--text); }
+.quiz-header p { color: var(--text2); font-size: 14px; margin-top: 4px; }
+.quiz-question { margin-bottom: 24px; }
+.quiz-question-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+.quiz-option { padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 14px; margin-bottom: 8px; background: white; color: var(--text); transition: border-color 0.15s, background 0.15s; user-select: none; }
+.quiz-option:hover:not(.disabled) { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option.selected { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option.correct { border-color: var(--green) !important; background: var(--green-light); color: #0d6e2a; font-weight: 500; }
+.quiz-option.wrong { border-color: var(--red) !important; background: var(--red-light); color: var(--red); }
+.quiz-option.disabled { pointer-events: none; }
+.quiz-btn { background: var(--blue); color: white; border: none; padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; width: 100%; transition: background 0.15s, opacity 0.2s; margin-top: 8px; }
+.quiz-btn:hover:not(:disabled) { background: var(--blue-dark); }
+.quiz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.quiz-result { text-align: center; padding: 28px 20px; display: none; }
+.quiz-result.show { display: block; }
+.quiz-result-score { font-size: 52px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+.quiz-result-score.pass { color: var(--green); }
+.quiz-result-score.fail { color: var(--red); }
+.quiz-pass-banner { background: var(--green-light); border: 1px solid #a8d5b5; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; text-align: left; }
+.qpb-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.qpb-icon svg { fill: white; }
+.qpb-title { font-weight: 700; color: var(--green); font-size: 15px; }
+.qpb-sub { font-size: 13px; color: #2e7d32; margin-top: 1px; }
+.quiz-result-msg { font-size: 15px; margin-bottom: 20px; color: var(--text2); }
+.quiz-result-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+.quiz-result-btn:hover { opacity: 0.9; }
 
-  /* TOOLTIP */
-  .tooltip { position: relative; display: inline-block; }
-  .tooltip-text { visibility: hidden; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); font-size: 12px; border-radius: 6px; padding: 6px 10px; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 10; }
-  .tooltip:hover .tooltip-text { visibility: visible; }
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+/* UTILITY */
+.hidden { display: none !important; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main-content { padding: 20px 16px 60px; }
+  .hero-card { flex-direction: column; padding: 24px 20px; gap: 20px; }
+  .hero-right { align-self: center; }
+  .hero-title { font-size: 22px; }
+  .mod-h1 { font-size: 22px; }
+  .compare-table { font-size: 13px; }
+  .compare-table th, .compare-table td { padding: 8px 10px; }
+  .quiz-section { padding: 20px 16px; }
+  /* Module card mobile fixes */
+  .module-card { padding: 14px 16px; gap: 12px; flex-wrap: wrap; min-height: 60px; }
+  .mc-right { min-width: unset; text-align: left; flex-basis: auto; }
+  .mc-body { min-width: 0; flex: 1 1 100px; }
+  .mc-title { color: #202124 !important; }
+  .mc-desc { color: #5f6368 !important; }
+  .mc-duration { color: #5f6368 !important; }
+}
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-brand">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    Google SA Interview Prep
+<!-- TOP BAR -->
+<header class="top-bar">
+  <div class="top-bar-brand">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5"/>
+      <path d="M2 12l10 5 10-5"/>
+    </svg>
+    SA Interview Prep
   </div>
-  <div class="nav-score">Interview Readiness: <span id="nav-score">0</span>/100</div>
-</nav>
-
-<div id="home-view">
-  <div class="home">
-    <div class="home-header">
-      <h1>AI/ML Technical Interview Course</h1>
-      <p>5 modules. Built for the Round 2 technical screen. Know this cold.</p>
+  <div class="top-bar-progress">
+    <div class="top-bar-progress-bar">
+      <div class="top-bar-progress-fill" id="top-progress-fill"></div>
     </div>
-
-    <div class="readiness-card">
-      <div class="readiness-label">Interview Readiness Score</div>
-      <div class="readiness-score" id="readiness-score-display">0</div>
-      <div class="readiness-bar"><div class="readiness-fill" id="readiness-fill" style="width:0%"></div></div>
-      <div class="readiness-sub" id="readiness-sub">Complete modules and pass quizzes to increase your score</div>
-    </div>
-
-    <div class="progress-steps" id="progress-steps">
-      <div class="progress-step" data-module="1"></div>
-      <div class="progress-step" data-module="2"></div>
-      <div class="progress-step" data-module="3"></div>
-      <div class="progress-step" data-module="4"></div>
-      <div class="progress-step" data-module="5"></div>
-    </div>
-
-    <div class="module-grid" id="module-grid">
-      <!-- Generated by JS -->
-    </div>
+    <div class="top-bar-pct" id="top-progress-pct">0%</div>
   </div>
-</div>
+  <div class="top-bar-score">Score: <span id="nav-score">0</span>/100</div>
+</header>
 
-<div id="module-view" class="hidden">
-  <!-- Generated by JS -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <!-- populated by JS -->
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <div id="home-view">
+      <!-- populated by JS -->
+    </div>
+
+    <div id="module-view" class="hidden">
+      <!-- populated by JS -->
+    </div>
+
+  </main>
 </div>
 
 <script>
@@ -254,14 +316,8 @@ const MODULES_META = [
   { id: 5, title: "Vertex AI Pipelines", time: "20 min", desc: "Orchestrated ML workflows, vs Cloud Run vs n8n" },
 ];
 
-function getState() {
-  try {
-    return JSON.parse(localStorage.getItem('sa-course-state') || '{}');
-  } catch(e) { return {}; }
-}
-function setState(state) {
-  localStorage.setItem('sa-course-state', JSON.stringify(state));
-}
+function getState() { try { return JSON.parse(localStorage.getItem('sa-course-state') || '{}'); } catch(e) { return {}; } }
+function setState(state) { localStorage.setItem('sa-course-state', JSON.stringify(state)); }
 function getModuleState(id) {
   const s = getState();
   return s[`module_${id}`] || { completed: false, quizPassed: false, quizScore: null, visited: false };
@@ -281,6 +337,65 @@ function getReadinessScore() {
   }
   return Math.min(score, 100);
 }
+function getOverallPct() {
+  let done = 0;
+  for (let i = 1; i <= 5; i++) { if (getModuleState(i).quizPassed) done++; }
+  return Math.round((done / 5) * 100);
+}
+
+// ============================================================
+// SIDEBAR: HOME
+// ============================================================
+function renderSidebarHome() {
+  const sb = document.getElementById('sidebar');
+  let html = `<div class="sb-section-label">Course Modules</div>`;
+  for (let i = 0; i < 5; i++) {
+    const m = MODULES_META[i];
+    const ms = getModuleState(m.id);
+    const prevPassed = m.id === 1 || getModuleState(m.id - 1).quizPassed;
+    const locked = !prevPassed;
+    let cls = 'sb-item';
+    if (ms.quizPassed) cls += ' sb-complete';
+    else if (ms.visited) cls += ' sb-active';
+    if (locked) cls += ' sb-locked';
+    const icon = ms.quizPassed
+      ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M20 6L9 17l-5-5"/><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`
+      : (locked ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 11H16V7C16 4.79 14.21 3 12 3S8 4.79 8 7V11H6C4.9 11 4 11.9 4 13V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V13C20 11.9 19.1 11 18 11ZM12 17C10.9 17 10 16.1 10 15S10.9 13 12 13 14 13.9 14 15 13.1 17 12 17ZM14.1 11H9.9V7C9.9 5.84 10.84 4.9 12 4.9 13.16 4.9 14.1 5.84 14.1 7V11Z"/></svg>` : m.id);
+    html += `<button class="${cls}" onclick="${locked ? '' : 'openModule('+m.id+')'}">`
+      + `<div class="sb-num">${ms.quizPassed ? '✓' : (locked ? '🔒' : m.id)}</div>`
+      + `<span style="flex:1;line-height:1.3">${m.title}</span>`
+      + `</button>`;
+  }
+  sb.innerHTML = html;
+}
+
+// ============================================================
+// SIDEBAR: MODULE
+// ============================================================
+function renderSidebarModule(moduleId) {
+  const meta = MODULES_META.find(m => m.id === moduleId);
+  const sb = document.getElementById('sidebar');
+  // Build TOC from section titles
+  const content = MODULE_CONTENT[moduleId] || '';
+  const secMatches = [...content.matchAll(/<span class="section-num">\d+<\/span>\s*([^<]+)/g)];
+  let tocHTML = '';
+  secMatches.forEach(m => {
+    tocHTML += `<div class="sb-toc-item"><div class="sb-toc-bullet"></div><span>${m[1].trim()}</span></div>`;
+  });
+  sb.innerHTML = `
+    <button class="sb-back" onclick="renderHome()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
+      Back to Course
+    </button>
+    <div class="sb-module-info">
+      <div class="sb-module-badge">Module ${moduleId} of 5</div>
+      <div class="sb-module-name">${meta.title}</div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section-label">Sections</div>
+    ${tocHTML}
+  `;
+}
 
 // ============================================================
 // HOME SCREEN
@@ -290,50 +405,130 @@ function renderHome() {
   document.getElementById('module-view').classList.add('hidden');
 
   const score = getReadinessScore();
-  document.getElementById('readiness-score-display').textContent = score;
-  document.getElementById('readiness-fill').style.width = score + '%';
+  const pct = getOverallPct();
   document.getElementById('nav-score').textContent = score;
-  
-  let sub = 'Complete modules and pass quizzes to increase your score';
-  if (score >= 80) sub = '🔥 Looking interview-ready. Keep grinding.';
-  else if (score >= 50) sub = 'Good progress — keep pushing through the modules';
-  else if (score >= 20) sub = 'Getting started — each module adds 20 points max';
-  document.getElementById('readiness-sub').textContent = sub;
+  document.getElementById('top-progress-fill').style.width = pct + '%';
+  document.getElementById('top-progress-pct').textContent = pct + '%';
 
-  // Progress steps
+  renderSidebarHome();
+
+  // Find first unlocked module to show CTA
+  let ctaModuleId = 1;
   for (let i = 1; i <= 5; i++) {
-    const step = document.querySelector(`.progress-step[data-module="${i}"]`);
-    const ms = getModuleState(i);
-    step.className = 'progress-step' + (ms.quizPassed ? ' done' : ms.visited ? ' active' : '');
+    if (!getModuleState(i).quizPassed) { ctaModuleId = i; break; }
   }
+  const ctaLabel = score === 0 ? 'Start Learning' : (pct === 100 ? 'Review Course' : 'Continue Learning');
 
-  // Module cards
-  const grid = document.getElementById('module-grid');
-  grid.innerHTML = '';
+  // Ring: circumference for r=52 circle = 2*π*52 ≈ 327
+  const circ = 327;
+  const fill = Math.round((score / 100) * circ);
+
+  let subMsg = 'Complete modules and pass quizzes to raise your score.';
+  if (score >= 80) subMsg = 'Strong progress — you\'re interview-ready.';
+  else if (score >= 50) subMsg = 'Halfway there — keep pushing through the modules.';
+  else if (score >= 20) subMsg = 'Getting started — each module adds 20 pts max.';
+
+  let completedCount = 0;
+  for (let i = 1; i <= 5; i++) { if (getModuleState(i).quizPassed) completedCount++; }
+
+  document.getElementById('home-view').innerHTML = `
+    <div class="hero-card">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Google Cloud SA
+        </div>
+        <div class="hero-title">AI/ML Technical Interview Course</div>
+        <div class="hero-subtitle">5 modules. Built for the Round 2 technical screen. Know this cold.</div>
+        <div class="hero-meta">
+          <span class="meta-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            ~2 hours
+          </span>
+          <span class="meta-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            5 Modules
+          </span>
+          <span class="meta-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Intermediate
+          </span>
+          <span class="meta-chip" style="background:var(--green-light);color:var(--green);border-color:#a8d5b5">
+            ${completedCount}/5 Complete
+          </span>
+        </div>
+        <button class="hero-cta" onclick="openModule(${ctaModuleId})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          ${ctaLabel}
+        </button>
+      </div>
+      <div class="hero-right">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 116 116">
+            <circle class="ring-track" cx="58" cy="58" r="52"/>
+            <circle class="ring-fill" id="ring-fill-el" cx="58" cy="58" r="52" style="stroke-dasharray:${fill} ${circ}"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-score" id="ring-score">${score}</div>
+            <div class="ring-label">/ 100</div>
+          </div>
+        </div>
+        <div class="ring-sub">Interview Readiness</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:6px;max-width:110px;text-align:center">${subMsg}</div>
+      </div>
+    </div>
+
+    <div class="home-section-row">
+      <div class="home-section-title" style="color:#202124">Course Modules</div>
+      <div class="home-section-sub" style="color:#5f6368">Pass 3/5 on each quiz to unlock the next</div>
+    </div>
+    <div id="module-cards-container" style="min-height:60px">${renderModuleCards()}</div>
+  `;
+}
+
+function renderModuleCards() {
+  if (!MODULES_META || MODULES_META.length === 0) {
+    return '<p style="color:#5f6368;padding:16px">No modules available.</p>';
+  }
+  let html = '';
   for (let i = 0; i < 5; i++) {
     const m = MODULES_META[i];
     const ms = getModuleState(m.id);
     const prevPassed = m.id === 1 || getModuleState(m.id - 1).quizPassed;
     const locked = !prevPassed;
-    
-    let statusClass = 'status-available', statusText = 'Start';
-    if (ms.quizPassed) { statusClass = 'status-completed'; statusText = 'Completed ✓'; }
-    else if (ms.visited) { statusClass = 'status-inprogress'; statusText = 'In Progress'; }
-    else if (locked) { statusClass = 'status-locked'; statusText = 'Locked'; }
 
-    const card = document.createElement('div');
-    card.className = 'module-card' + (ms.quizPassed ? ' completed' : ms.visited ? ' active' : '') + (locked ? ' locked' : '');
-    card.innerHTML = `
-      <div class="module-num">${m.id}</div>
-      <div class="module-info">
-        <div class="module-title">${m.title}</div>
-        <div class="module-meta">~${m.time} · ${m.desc}</div>
+    let cardCls = 'module-card';
+    let chipHTML, iconContent;
+    if (ms.quizPassed) {
+      cardCls += ' mc-complete';
+      chipHTML = `<span class="mc-chip chip-complete">✓ Complete</span>`;
+      iconContent = `<span style="color:var(--green)">✓</span>`;
+    } else if (locked) {
+      cardCls += ' mc-locked';
+      chipHTML = `<span class="mc-chip chip-locked">🔒 Locked</span>`;
+      iconContent = m.id;
+    } else if (ms.visited) {
+      cardCls += ' mc-inprogress';
+      chipHTML = `<span class="mc-chip chip-inprogress">In Progress</span>`;
+      iconContent = m.id;
+    } else {
+      chipHTML = `<span class="mc-chip chip-available">Start</span>`;
+      iconContent = m.id;
+    }
+
+    html += `<div class="${cardCls}" ${locked ? '' : `onclick="openModule(${m.id})"`}>
+      <div class="mc-icon">${iconContent}</div>
+      <div class="mc-body">
+        <div class="mc-title" style="color:#202124;font-size:15px;font-weight:600;margin-bottom:3px">${m.title}</div>
+        <div class="mc-desc" style="color:#5f6368;font-size:13px">${m.desc}</div>
       </div>
-      <div class="module-status ${statusClass}">${statusText}</div>
-    `;
-    if (!locked) card.onclick = () => openModule(m.id);
-    grid.appendChild(card);
+      <div class="mc-right">
+        <div class="mc-duration" style="color:#5f6368;font-size:12px;margin-bottom:6px">~${m.time}</div>
+        ${chipHTML}
+      </div>
+    </div>`;
   }
+  return html;
 }
 
 // ============================================================
@@ -398,7 +593,6 @@ const MODULE_CONTENT = {
     <div class="callout-label">🔵 Google Angle</div>
     <p><strong>text-embedding-gecko</strong> is Vertex AI's embedding model for English text. It produces 768-dimensional vectors and is optimized for semantic similarity tasks like retrieval. For multilingual use, there's <code>textembedding-gecko-multilingual</code>.</p>
   </div>
-  
   <div class="quickcheck" id="qc-1-1">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">What property makes embeddings useful for semantic search?</div>
@@ -427,7 +621,6 @@ const MODULE_CONTENT = {
     <div class="callout-label">🔮 Your Context</div>
     <p>In your RDS Knowledge Base, when someone asks "why is my printer offline?", you embed that query and find chunks from your knowledge docs with cosine similarity above ~0.75. Those high-similarity chunks are what gets sent to the LLM as context.</p>
   </div>
-  
   <div class="quickcheck" id="qc-1-2">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">Why does cosine similarity work better than Euclidean distance for comparing embeddings?</div>
@@ -442,8 +635,7 @@ const MODULE_CONTENT = {
 </div>
 
 <div class="section">
-  <h2><span class="section-num">3</span> Embedding Models — What They Are & How They Differ</h2>
-  <p>Not all embedding models are equal. Key dimensions of difference:</p>
+  <h2><span class="section-num">3</span> Embedding Models — What They Are &amp; How They Differ</h2>
   <table class="compare-table">
     <tr><th>Model</th><th>Dimensions</th><th>Best For</th><th>Usage</th></tr>
     <tr><td><strong>text-embedding-gecko</strong></td><td>768</td><td>English retrieval, Vertex AI native</td><td><span class="tag tag-blue">Vertex AI</span></td></tr>
@@ -451,12 +643,10 @@ const MODULE_CONTENT = {
     <tr><td><strong>text-embedding-3-small</strong></td><td>1536</td><td>OpenAI ecosystem, strong performance</td><td><span class="tag tag-yellow">OpenAI</span></td></tr>
     <tr><td><strong>e5-large</strong></td><td>1024</td><td>Instruction-tuned retrieval tasks</td><td><span class="tag tag-green">Open Source</span></td></tr>
   </table>
-  <p>Higher dimensions don't automatically mean better quality — it depends on the training objective and data. For most enterprise retrieval use cases, gecko is the right default on GCP.</p>
 </div>
 
 <div class="section">
   <h2><span class="section-num">4</span> Vector Search: Exact vs Approximate (ANN)</h2>
-  <p>Once you have embeddings stored, you need to search them. Two approaches:</p>
   <h3>Exact Search (brute force)</h3>
   <p>Compare your query vector against every stored vector. 100% accurate. But at 10 million documents, you're doing 10 million cosine similarity calculations per query. That's too slow.</p>
   <h3>Approximate Nearest Neighbor (ANN)</h3>
@@ -464,14 +654,12 @@ const MODULE_CONTENT = {
   <div class="callout callout-google">
     <div class="callout-label">🔵 Google Angle — Matching Engine vs pgvector</div>
     <p><strong>Vertex AI Matching Engine</strong>: Managed ANN service, handles billions of vectors, auto-scales, SLA-backed. Use this when you're at enterprise scale with millions+ vectors.<br><br>
-    <strong>pgvector on Cloud SQL</strong>: Postgres extension that adds vector search to your existing database. Supports both exact and HNSW approximate search. Your RDS Knowledge Base runs on this — and that's a defensible call when query volume is moderate and you want to avoid the operational overhead of a separate vector store. Be ready to articulate the trade-off.</p>
+    <strong>pgvector on Cloud SQL</strong>: Postgres extension that adds vector search to your existing database. Supports both exact and HNSW approximate search. Your RDS Knowledge Base runs on this — and that's a defensible call when query volume is moderate and you want to avoid the operational overhead of a separate vector store.</p>
   </div>
-  
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Your Context — The Pgvector Defense</div>
     <p>If asked why pgvector over Matching Engine: "At our current knowledge base scale — under 100K chunks — exact search in pgvector is sub-100ms. Matching Engine adds operational complexity and cost that's hard to justify until you hit millions of vectors. We designed it so migration to Matching Engine is a config change when we get there."</p>
   </div>
-
   <div class="quickcheck" id="qc-1-3">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">At what scale does Vertex AI Matching Engine become the right choice over pgvector?</div>
@@ -489,9 +677,9 @@ const MODULE_CONTENT = {
   <h2><span class="section-num">5</span> How This Powers RAG</h2>
   <p>RAG is just four steps with embeddings as the mechanism:</p>
   <ol>
-    <li><strong>Chunk</strong> — Split your source documents into ~500 token pieces (too large and you lose precision; too small and you lose context)</li>
+    <li><strong>Chunk</strong> — Split your source documents into ~500 token pieces</li>
     <li><strong>Embed</strong> — Run each chunk through an embedding model to get a vector</li>
-    <li><strong>Store</strong> — Save chunk text + vector to a vector database (pgvector, Matching Engine, etc.)</li>
+    <li><strong>Store</strong> — Save chunk text + vector to a vector database</li>
     <li><strong>Retrieve</strong> — At query time, embed the user's question, find the top-K most similar chunks, inject them as context into the LLM prompt</li>
   </ol>
   <div class="code-block">
@@ -508,7 +696,7 @@ response = <span class="fn">llm</span>(prompt)
   </div>
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ Common Failure Mode</div>
-    <p>RAG fails when retrieval is bad. If the wrong chunks get retrieved, the LLM either hallucinates to fill the gap or confidently gives the wrong answer using off-topic context. Your governance dashboard's hallucination scorer catches this downstream — but fixing retrieval quality (better chunking, better embeddings, reranking) is the upstream solution.</p>
+    <p>RAG fails when retrieval is bad. If the wrong chunks get retrieved, the LLM either hallucinates to fill the gap or confidently gives the wrong answer. Your governance dashboard's hallucination scorer catches this downstream — but fixing retrieval quality is the upstream solution.</p>
   </div>
 </div>
 `,
@@ -516,28 +704,11 @@ response = <span class="fn">llm</span>(prompt)
   2: `
 <div class="section">
   <h2><span class="section-num">1</span> The Three Tools and When to Use Each</h2>
-  <p>Interviewers love this question because it tests whether you actually understand trade-offs or just know buzzwords. The answer isn't "it depends" with no follow-through — it's a clear decision framework.</p>
-  
   <table class="compare-table">
     <tr><th>Approach</th><th>What Changes</th><th>When to Use</th><th>When It Fails</th></tr>
-    <tr>
-      <td><strong>Prompting</strong></td>
-      <td>Nothing — guides existing knowledge</td>
-      <td>Model already has the knowledge; just need framing/format</td>
-      <td>Context limit hit; model lacks the knowledge</td>
-    </tr>
-    <tr>
-      <td><strong>RAG</strong></td>
-      <td>What the model <em>sees</em> at runtime</td>
-      <td>External/proprietary/changing data; no retraining</td>
-      <td>Bad retrieval → hallucination; latency-sensitive use cases</td>
-    </tr>
-    <tr>
-      <td><strong>Fine-tuning</strong></td>
-      <td>Model <em>weights</em> — permanent</td>
-      <td>Need different behavior, format, or domain reasoning baked in</td>
-      <td>Small dataset → overfitting; expensive; hard to iterate</td>
-    </tr>
+    <tr><td><strong>Prompting</strong></td><td>Nothing — guides existing knowledge</td><td>Model already has the knowledge; just need framing/format</td><td>Context limit hit; model lacks the knowledge</td></tr>
+    <tr><td><strong>RAG</strong></td><td>What the model <em>sees</em> at runtime</td><td>External/proprietary/changing data; no retraining</td><td>Bad retrieval → hallucination; latency-sensitive use cases</td></tr>
+    <tr><td><strong>Fine-tuning</strong></td><td>Model <em>weights</em> — permanent</td><td>Need different behavior, format, or domain reasoning baked in</td><td>Small dataset → overfitting; expensive; hard to iterate</td></tr>
   </table>
 </div>
 
@@ -545,17 +716,15 @@ response = <span class="fn">llm</span>(prompt)
   <h2><span class="section-num">2</span> Prompting — The Default</h2>
   <p>Start here. Always. Prompting is zero infrastructure cost and lets you iterate in seconds.</p>
   <h3>Zero-shot</h3>
-  <p>Just ask. No examples. Works when the model's training already covers the task well. "Summarize this customer complaint in one sentence."</p>
+  <p>Just ask. No examples. Works when the model's training already covers the task well.</p>
   <h3>Few-shot</h3>
-  <p>Give 2-5 examples of input → output before asking. Dramatically improves consistency of format and style. "Here are 3 examples of how we categorize tickets. Now categorize this one."</p>
+  <p>Give 2-5 examples of input → output before asking. Dramatically improves consistency of format and style.</p>
   <h3>Chain-of-thought</h3>
   <p>Ask the model to show its reasoning before giving the answer. "Think step by step." Dramatically improves accuracy on reasoning tasks.</p>
-  
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ When Prompting Hits Its Limit</div>
     <p>Context windows are large (Gemini 1.5 Pro: 1M tokens) but not infinite. If your use case needs thousands of documents in context every query, prompting alone won't work — you need retrieval. And if the model simply wasn't trained on your domain knowledge, prompting can't conjure knowledge it doesn't have.</p>
   </div>
-  
   <div class="quickcheck" id="qc-2-1">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">A customer wants Gemini to follow their specific legal writing style across all documents. Which approach should you start with?</div>
@@ -570,10 +739,8 @@ response = <span class="fn">llm</span>(prompt)
 </div>
 
 <div class="section">
-  <h2><span class="section-num">2</span> RAG — Ground the Model in Your Data</h2>
+  <h2><span class="section-num">3</span> RAG — Ground the Model in Your Data</h2>
   <p>RAG solves the core problem with LLMs: their knowledge is frozen at training time. Anything after that cutoff, anything proprietary, anything you want to update without retraining — that's the RAG use case.</p>
-  <h3>The pattern</h3>
-  <p>Chunk your documents → embed them → store in a vector DB → at query time, retrieve the most relevant chunks → inject into the LLM prompt. The LLM answers using your data, not just its weights.</p>
   <h3>RAG is right when:</h3>
   <ul>
     <li>Data changes frequently (product catalog, incident reports, knowledge base)</li>
@@ -585,12 +752,10 @@ response = <span class="fn">llm</span>(prompt)
     <div class="callout-label">🔮 Your Context — RDS Knowledge Base</div>
     <p>This is exactly what you built for RDS. HVAC manuals, network docs, internal SOPs — none of that is in Gemini's weights. You chunked them, embedded with text-embedding-gecko, stored in pgvector on Cloud SQL, and retrieve at query time. <strong>85% first-contact resolution improvement.</strong> That's your RAG story.</p>
   </div>
-
   <div class="callout callout-google">
     <div class="callout-label">🔵 Google Angle — Vertex AI Search</div>
-    <p><strong>Vertex AI Search</strong> is Google's managed RAG product. It handles ingestion, chunking, embedding, and retrieval behind an API. Use it when a customer wants RAG without building the infrastructure. Know it as a "managed RAG" product that trades flexibility for speed-to-deploy.</p>
+    <p><strong>Vertex AI Search</strong> is Google's managed RAG product. It handles ingestion, chunking, embedding, and retrieval behind an API. Use it when a customer wants RAG without building the infrastructure.</p>
   </div>
-  
   <div class="quickcheck" id="qc-2-2">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">A hospital wants their AI to answer questions about patient policies that change quarterly. Best approach?</div>
@@ -605,8 +770,8 @@ response = <span class="fn">llm</span>(prompt)
 </div>
 
 <div class="section">
-  <h2><span class="section-num">3</span> Fine-Tuning — When Behavior Needs to Change</h2>
-  <p>Fine-tuning modifies the model's weights using your labeled examples. It's the most powerful option and the most expensive. Save it for when the base model's behavior genuinely needs to be different — not just guided differently.</p>
+  <h2><span class="section-num">4</span> Fine-Tuning — When Behavior Needs to Change</h2>
+  <p>Fine-tuning modifies the model's weights using your labeled examples. It's the most powerful option and the most expensive. Save it for when the base model's behavior genuinely needs to be different.</p>
   <h3>Fine-tuning is right when:</h3>
   <ul>
     <li>You need a specific output format that prompting can't reliably produce</li>
@@ -615,31 +780,27 @@ response = <span class="fn">llm</span>(prompt)
     <li>Latency is critical — fine-tuned models don't need a long system prompt</li>
     <li>You want to distill a large model's behavior into a smaller, cheaper model</li>
   </ul>
-  <h3>Supervised Fine-tuning (SFT) vs RLHF</h3>
-  <p>SFT: train on input/output pairs — this is what most enterprise fine-tuning looks like on Vertex AI. RLHF (Reinforcement Learning from Human Feedback) involves training a reward model on human preferences — more complex, used for alignment at model-provider scale.</p>
   <div class="callout callout-google">
     <div class="callout-label">🔵 Google Angle — Vertex AI Fine-Tuning</div>
-    <p>Vertex AI supports supervised fine-tuning for Gemini models. You provide a JSONL dataset of (input, expected output) pairs. Training runs on Google's infrastructure. The result is a tuned model endpoint you deploy like any other Vertex AI model. Model Garden also has open-source models (Llama, Mistral) you can fine-tune if needed.</p>
+    <p>Vertex AI supports supervised fine-tuning for Gemini models. You provide a JSONL dataset of (input, expected output) pairs. Training runs on Google's infrastructure. The result is a tuned model endpoint you deploy like any other Vertex AI model.</p>
   </div>
-  
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ Fine-Tuning Failure Modes</div>
-    <p><strong>Overfitting:</strong> Too little training data and the model memorizes examples rather than generalizing. <strong>Catastrophic forgetting:</strong> The model improves on your task but degrades on general capability. <strong>Data quality:</strong> Bad training examples produce bad fine-tuned models — garbage in, garbage out at the weight level.</p>
+    <p><strong>Overfitting:</strong> Too little training data and the model memorizes examples rather than generalizing. <strong>Catastrophic forgetting:</strong> The model improves on your task but degrades on general capability. <strong>Data quality:</strong> Bad training examples produce bad fine-tuned models.</p>
   </div>
 </div>
 
 <div class="section">
-  <h2><span class="section-num">4</span> The Decision Framework</h2>
-  <p>When an interviewer presents a scenario, run through this:</p>
+  <h2><span class="section-num">5</span> The Decision Framework</h2>
   <ol>
     <li><strong>Can prompting solve it?</strong> Always ask first. Cheapest, fastest to iterate.</li>
     <li><strong>Does the model need external/changing data?</strong> → RAG</li>
     <li><strong>Does the model's base behavior need to change?</strong> → Fine-tuning</li>
-    <li><strong>Can you combine them?</strong> Fine-tuning + RAG is a valid pattern — tune for behavior, use RAG for live data</li>
+    <li><strong>Can you combine them?</strong> Fine-tuning + RAG is a valid pattern</li>
   </ol>
   <div class="callout callout-scott">
     <div class="callout-label">🔮 The Interview Move</div>
-    <p>When asked about a new scenario, say: "My default would be to validate with prompting first. If we hit a wall on data recency or knowledge gaps, that's the RAG trigger. Fine-tuning only comes into the conversation when we've established the base model's behavior is the actual bottleneck." This signals you understand cost vs. complexity trade-offs.</p>
+    <p>When asked about a new scenario, say: "My default would be to validate with prompting first. If we hit a wall on data recency or knowledge gaps, that's the RAG trigger. Fine-tuning only comes into the conversation when we've established the base model's behavior is the actual bottleneck."</p>
   </div>
 </div>
 `,
@@ -654,7 +815,6 @@ response = <span class="fn">llm</span>(prompt)
 <div class="section">
   <h2><span class="section-num">2</span> Offline Evaluation</h2>
   <p>Offline evaluation uses a <strong>held-out test set</strong> — data the model has never seen during training. You measure performance before the model touches production users.</p>
-  <h3>Key metrics by task</h3>
   <table class="compare-table">
     <tr><th>Task Type</th><th>Metrics</th><th>What They Measure</th></tr>
     <tr><td>Classification</td><td>Accuracy, F1, Precision, Recall</td><td>How often the model gets the label right</td></tr>
@@ -662,14 +822,12 @@ response = <span class="fn">llm</span>(prompt)
     <tr><td>Question answering</td><td>Exact Match, F1</td><td>Whether answers match expected answers</td></tr>
     <tr><td>Retrieval</td><td>MRR, NDCG, Recall@K</td><td>Quality of ranking and retrieval</td></tr>
   </table>
-  <h3>What BLEU and ROUGE actually measure</h3>
-  <p><strong>BLEU</strong> (Bilingual Evaluation Understudy): measures precision of n-gram overlap between generated text and reference. Originally for translation, now used broadly.<br>
-  <strong>ROUGE</strong> (Recall-Oriented Understudy for Gisting Evaluation): measures recall — how much of the reference text appears in the generated output. Commonly used for summarization.</p>
+  <h3>BLEU vs ROUGE</h3>
+  <p><strong>BLEU</strong>: measures precision of n-gram overlap between generated text and reference. <strong>ROUGE</strong>: measures recall — how much of the reference text appears in the generated output. Commonly used for summarization.</p>
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ Metric Pitfalls</div>
-    <p>BLEU and ROUGE only measure surface overlap. A response can score poorly on BLEU while being semantically correct (different words, same meaning), or score well while being factually wrong. Always combine automatic metrics with human evaluation for high-stakes tasks.</p>
+    <p>BLEU and ROUGE only measure surface overlap. A response can score poorly on BLEU while being semantically correct. Always combine automatic metrics with human evaluation for high-stakes tasks.</p>
   </div>
-
   <div class="quickcheck" id="qc-3-1">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">You're evaluating an LLM that summarizes customer support tickets. Which metric family is most appropriate?</div>
@@ -685,17 +843,14 @@ response = <span class="fn">llm</span>(prompt)
 
 <div class="section">
   <h2><span class="section-num">3</span> Online Evaluation</h2>
-  <p>Once you ship, you're operating in the real world with real users and real distribution shifts. Offline metrics won't catch everything. Online evaluation watches production.</p>
+  <p>Once you ship, you're operating in the real world with real users and real distribution shifts. Online evaluation watches production.</p>
   <h3>Signals to track</h3>
   <ul>
     <li><strong>Explicit feedback:</strong> thumbs up/down, ratings, correction submissions</li>
-    <li><strong>Implicit signals:</strong> follow-up clarification questions (user wasn't satisfied), conversation abandonment, task completion rates</li>
-    <li><strong>Latency & cost:</strong> if response time spikes, user experience degrades. If cost per query explodes, the economics break</li>
+    <li><strong>Implicit signals:</strong> follow-up clarification questions, conversation abandonment, task completion rates</li>
+    <li><strong>Latency &amp; cost:</strong> if response time spikes, user experience degrades</li>
     <li><strong>Error rates:</strong> refusals, empty responses, format violations</li>
   </ul>
-  <h3>A/B Testing</h3>
-  <p>Compare two model versions by routing a percentage of traffic to each. Measure which performs better on your production metrics. This is how you safely validate improvements before full rollout.</p>
-  
   <div class="quickcheck" id="qc-3-2">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">Users of your AI assistant keep asking follow-up questions after every response. What does this signal?</div>
@@ -723,8 +878,7 @@ response = <span class="fn">llm</span>(prompt)
   <ul>
     <li>Domain-specific factual errors (the judge may not know the domain)</li>
     <li>Confident-sounding wrong answers — both models can be confidently wrong</li>
-    <li>Subtle biases introduced by the judge model's own preferences</li>
-    <li>Calibration issues — the judge tends to prefer longer, more elaborate responses even when concise is correct</li>
+    <li>Calibration issues — the judge tends to prefer longer, more elaborate responses</li>
   </ul>
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Your Context — Governance Dashboard</div>
@@ -734,12 +888,12 @@ response = <span class="fn">llm</span>(prompt)
 
 <div class="section">
   <h2><span class="section-num">5</span> Drift Detection</h2>
-  <p>Even without retraining, model behavior changes. The world changes (input distribution shifts), prompts get edited, APIs get updated. Drift detection watches for these changes.</p>
+  <p>Even without retraining, model behavior changes. The world changes, prompts get edited, APIs get updated. Drift detection watches for these changes.</p>
   <h3>Types of drift</h3>
   <ul>
-    <li><strong>Input/feature drift:</strong> The distribution of queries changes (users are asking different things)</li>
-    <li><strong>Output/behavior drift:</strong> For the same input, outputs are changing (model updates, prompt drift)</li>
-    <li><strong>Concept drift:</strong> The relationship between inputs and correct outputs changes (world facts change)</li>
+    <li><strong>Input/feature drift:</strong> The distribution of queries changes</li>
+    <li><strong>Output/behavior drift:</strong> For the same input, outputs are changing</li>
+    <li><strong>Concept drift:</strong> The relationship between inputs and correct outputs changes</li>
   </ul>
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Your Context — DNA Fingerprinting</div>
@@ -756,23 +910,22 @@ response = <span class="fn">llm</span>(prompt)
 <div class="section">
   <h2><span class="section-num">1</span> What Is BigQuery ML?</h2>
   <p>BigQuery ML lets you build, train, and deploy machine learning models using SQL inside BigQuery. No Python environment to manage. No separate ML infrastructure. Your data stays in BigQuery, and your ML runs where your data lives.</p>
-  <p>The core appeal: if your team is already using BigQuery for analytics, adding ML is a SQL query away. Lower barrier than building a separate ML pipeline.</p>
   <div class="code-block">
 <span class="cm">-- The three-step BQML workflow</span>
-<span class="kw">CREATE OR REPLACE MODEL</span> `project.dataset.my_model`
-<span class="kw">OPTIONS</span>(model_type=<span class="str">'ARIMA_PLUS'</span>, time_series_timestamp_col=<span class="str">'ds'</span>, 
+<span class="kw">CREATE OR REPLACE MODEL</span> \`project.dataset.my_model\`
+<span class="kw">OPTIONS</span>(model_type=<span class="str">'ARIMA_PLUS'</span>, time_series_timestamp_col=<span class="str">'ds'</span>,
         time_series_data_col=<span class="str">'y'</span>, auto_arima=<span class="kw">TRUE</span>) <span class="kw">AS</span>
 <span class="kw">SELECT</span> timestamp <span class="kw">AS</span> ds, metric_value <span class="kw">AS</span> y
-<span class="kw">FROM</span> `project.dataset.ops_metrics`;
+<span class="kw">FROM</span> \`project.dataset.ops_metrics\`;
 
 <span class="cm">-- Evaluate model performance</span>
-<span class="kw">SELECT</span> * <span class="kw">FROM</span> ML.EVALUATE(<span class="kw">MODEL</span> `project.dataset.my_model`);
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> ML.EVALUATE(<span class="kw">MODEL</span> \`project.dataset.my_model\`);
 
 <span class="cm">-- Detect anomalies on new data</span>
 <span class="kw">SELECT</span> * <span class="kw">FROM</span> ML.DETECT_ANOMALIES(
-  <span class="kw">MODEL</span> `project.dataset.my_model`,
+  <span class="kw">MODEL</span> \`project.dataset.my_model\`,
   <span class="kw">STRUCT</span>(<span class="num">0.95</span> <span class="kw">AS</span> anomaly_prob_threshold),
-  (<span class="kw">SELECT</span> * <span class="kw">FROM</span> `project.dataset.new_ops_data`)
+  (<span class="kw">SELECT</span> * <span class="kw">FROM</span> \`project.dataset.new_ops_data\`)
 );
   </div>
   <div class="quickcheck" id="qc-4-1">
@@ -792,31 +945,11 @@ response = <span class="fn">llm</span>(prompt)
   <h2><span class="section-num">2</span> Key BQML Model Types</h2>
   <table class="compare-table">
     <tr><th>Model Type</th><th>Best For</th><th>Your Use Case</th></tr>
-    <tr>
-      <td><strong>ARIMA_PLUS</strong></td>
-      <td>Time-series forecasting & anomaly detection with seasonality</td>
-      <td><span class="tag tag-blue">RDS Ops Pipeline</span></td>
-    </tr>
-    <tr>
-      <td><strong>AUTOML</strong></td>
-      <td>Tabular classification/regression without feature engineering</td>
-      <td>Customer churn, lead scoring</td>
-    </tr>
-    <tr>
-      <td><strong>K-MEANS</strong></td>
-      <td>Clustering — find natural groupings in unlabeled data</td>
-      <td>Customer segmentation</td>
-    </tr>
-    <tr>
-      <td><strong>LOGISTIC_REG</strong></td>
-      <td>Binary/multiclass classification with interpretable weights</td>
-      <td>Binary ticket routing</td>
-    </tr>
-    <tr>
-      <td><strong>RANDOM_FOREST_CLASSIFIER</strong></td>
-      <td>Tabular classification with complex non-linear relationships</td>
-      <td>Fraud detection</td>
-    </tr>
+    <tr><td><strong>ARIMA_PLUS</strong></td><td>Time-series forecasting &amp; anomaly detection with seasonality</td><td><span class="tag tag-blue">RDS Ops Pipeline</span></td></tr>
+    <tr><td><strong>AUTOML</strong></td><td>Tabular classification/regression without feature engineering</td><td>Customer churn, lead scoring</td></tr>
+    <tr><td><strong>K-MEANS</strong></td><td>Clustering — find natural groupings in unlabeled data</td><td>Customer segmentation</td></tr>
+    <tr><td><strong>LOGISTIC_REG</strong></td><td>Binary/multiclass classification with interpretable weights</td><td>Binary ticket routing</td></tr>
+    <tr><td><strong>RANDOM_FOREST_CLASSIFIER</strong></td><td>Tabular classification with complex non-linear relationships</td><td>Fraud detection</td></tr>
   </table>
 </div>
 
@@ -825,16 +958,15 @@ response = <span class="fn">llm</span>(prompt)
   <p><strong>ARIMA</strong> stands for AutoRegressive Integrated Moving Average. The PLUS in BigQuery's version adds holiday and seasonal effects automatically.</p>
   <h3>Why it's the right tool for restaurant ops</h3>
   <ul>
-    <li><strong>Seasonality:</strong> Restaurant metrics have daily patterns (lunch/dinner peaks), weekly patterns (Friday vs. Tuesday), and annual patterns (holiday seasons). ARIMA_PLUS handles all of these automatically.</li>
-    <li><strong>Trend detection:</strong> It separates a long-term trend from seasonal variation, so you're not flagging expected seasonal highs as anomalies.</li>
+    <li><strong>Seasonality:</strong> Restaurant metrics have daily, weekly, and annual patterns. ARIMA_PLUS handles all of these automatically.</li>
+    <li><strong>Trend detection:</strong> It separates a long-term trend from seasonal variation.</li>
     <li><strong>Holiday effects:</strong> You can pass a holiday calendar; it won't flag Mother's Day dinner rush as anomalous.</li>
     <li><strong>Anomaly probability score:</strong> Output includes a probability that each point is anomalous, with configurable thresholds.</li>
   </ul>
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Your Context — RDS Troubleshooting Pipeline</div>
-    <p>For the RDS pipeline, ARIMA_PLUS on operational time-series data (ticket volume, resolution times, error rates) lets you detect when something deviates from what's "normal for a Tuesday in November" rather than just a static threshold. That's the <strong>"rule engines for the known, ML for the unknown"</strong> principle — rules handle the deterministic stuff; ARIMA_PLUS catches the subtle drift that rules miss.</p>
+    <p>For the RDS pipeline, ARIMA_PLUS on operational time-series data (ticket volume, resolution times, error rates) lets you detect when something deviates from what's "normal for a Tuesday in November." That's the <strong>"rule engines for the known, ML for the unknown"</strong> principle — rules handle the deterministic stuff; ARIMA_PLUS catches the subtle drift that rules miss.</p>
   </div>
-
   <div class="quickcheck" id="qc-4-2">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">Why would you choose ARIMA_PLUS over a static threshold alert for restaurant ops anomaly detection?</div>
@@ -850,26 +982,24 @@ response = <span class="fn">llm</span>(prompt)
 
 <div class="section">
   <h2><span class="section-num">4</span> Isolation Forest — When to Use It Instead</h2>
-  <p>Isolation Forest is a tree-based anomaly detection algorithm that works differently from ARIMA_PLUS. Instead of modeling normal behavior and flagging deviations from it, Isolation Forest isolates anomalies directly: anomalies are easier to isolate because they require fewer splits in a random tree.</p>
+  <p>Isolation Forest is a tree-based anomaly detection algorithm. Instead of modeling normal behavior and flagging deviations, Isolation Forest isolates anomalies directly.</p>
   <h3>When Isolation Forest beats ARIMA_PLUS</h3>
   <ul>
-    <li><strong>High-dimensional data:</strong> You have 20+ features you want to consider together. ARIMA_PLUS is single time-series; Isolation Forest handles multi-dimensional inputs.</li>
-    <li><strong>No clear time axis:</strong> If your data doesn't have a natural time series structure, ARIMA_PLUS doesn't apply.</li>
-    <li><strong>Complex interactions:</strong> Anomalies that are only visible when multiple features are considered together (normal individually, weird in combination).</li>
+    <li><strong>High-dimensional data:</strong> You have 20+ features to consider together. ARIMA_PLUS is single time-series; Isolation Forest handles multi-dimensional inputs.</li>
+    <li><strong>No clear time axis:</strong> If your data doesn't have a natural time series structure.</li>
+    <li><strong>Complex interactions:</strong> Anomalies that are only visible when multiple features are considered together.</li>
   </ul>
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ The Trade-off in Plain English</div>
-    <p>If you're watching one operational metric over time with known seasonality → ARIMA_PLUS. If you're watching 15 operational metrics simultaneously and want to flag when any unusual combination occurs → Isolation Forest. In the RDS pipeline, if you were monitoring CPU + memory + query latency + connection count together, Isolation Forest would be the right tool for that multi-dimensional view.</p>
+    <p>Watching one operational metric over time with known seasonality → ARIMA_PLUS. Watching 15 operational metrics simultaneously and want to flag unusual combinations → Isolation Forest.</p>
   </div>
 </div>
 
 <div class="section">
   <h2><span class="section-num">5</span> The SQL Workflow in Detail</h2>
-  <p>Three commands. Know the shape of each.</p>
   <div class="code-block">
 <span class="cm">-- Step 1: CREATE MODEL</span>
-<span class="cm">-- Trains the model on historical data</span>
-<span class="kw">CREATE OR REPLACE MODEL</span> `project.dataset.rds_anomaly_model`
+<span class="kw">CREATE OR REPLACE MODEL</span> \`project.dataset.rds_anomaly_model\`
 <span class="kw">OPTIONS</span>(
   model_type = <span class="str">'ARIMA_PLUS'</span>,
   time_series_timestamp_col = <span class="str">'event_time'</span>,
@@ -879,23 +1009,19 @@ response = <span class="fn">llm</span>(prompt)
   data_frequency = <span class="str">'HOURLY'</span>
 ) <span class="kw">AS</span>
 <span class="kw">SELECT</span> event_time, ticket_count, location_id
-<span class="kw">FROM</span> `project.dataset.ops_hourly`
-<span class="kw">WHERE</span> event_time < <span class="str">'2026-01-01'</span>;
+<span class="kw">FROM</span> \`project.dataset.ops_hourly\`
+<span class="kw">WHERE</span> event_time &lt; <span class="str">'2026-01-01'</span>;
 
-<span class="cm">-- Step 2: EVALUATE</span>
-<span class="cm">-- Check model quality before deploying</span>
-<span class="kw">SELECT</span> *
-<span class="kw">FROM</span> ML.EVALUATE(<span class="kw">MODEL</span> `project.dataset.rds_anomaly_model`);
+<span class="cm">-- Step 2: EVALUATE — check model quality</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> ML.EVALUATE(<span class="kw">MODEL</span> \`project.dataset.rds_anomaly_model\`);
 <span class="cm">-- Returns: MAE, MAPE, MSE, RMSE, RMSLE</span>
 
-<span class="cm">-- Step 3: DETECT_ANOMALIES</span>
-<span class="cm">-- Score new data for anomalies</span>
-<span class="kw">SELECT</span> *
-<span class="kw">FROM</span> ML.DETECT_ANOMALIES(
-  <span class="kw">MODEL</span> `project.dataset.rds_anomaly_model`,
+<span class="cm">-- Step 3: DETECT_ANOMALIES on new data</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> ML.DETECT_ANOMALIES(
+  <span class="kw">MODEL</span> \`project.dataset.rds_anomaly_model\`,
   <span class="kw">STRUCT</span>(<span class="num">0.9</span> <span class="kw">AS</span> anomaly_prob_threshold),
   (<span class="kw">SELECT</span> event_time, ticket_count, location_id
-   <span class="kw">FROM</span> `project.dataset.ops_recent`)
+   <span class="kw">FROM</span> \`project.dataset.ops_recent\`)
 )
 <span class="kw">WHERE</span> is_anomaly = <span class="kw">TRUE</span>;
   </div>
@@ -906,10 +1032,9 @@ response = <span class="fn">llm</span>(prompt)
 <div class="section">
   <h2><span class="section-num">1</span> What Is Vertex AI Pipelines?</h2>
   <p>Vertex AI Pipelines is a managed service for orchestrating ML workflows. You define each step of your ML process as a <strong>component</strong> (containerized code), connect them into a <strong>pipeline</strong> (a DAG), and Vertex handles execution, scheduling, artifact tracking, and versioning.</p>
-  <p>The syntax is Kubeflow Pipelines v2 (KFP). If you've used Apache Airflow or n8n, the DAG concept is familiar — but Pipelines is purpose-built for ML with built-in artifact and metadata tracking.</p>
   <div class="callout callout-google">
     <div class="callout-label">🔵 Google Angle</div>
-    <p>Vertex AI Pipelines runs on Google's managed infrastructure. You pay per pipeline run, not for persistent compute. It integrates natively with Vertex AI Experiments (track hyperparameters, metrics, artifacts across runs), Model Registry (version and manage models), and Feature Store (serve features for training and serving).</p>
+    <p>Vertex AI Pipelines runs on Google's managed infrastructure. Pay per pipeline run, not for persistent compute. Integrates natively with Vertex AI Experiments (track hyperparameters, metrics, artifacts across runs), Model Registry (version and manage models), and Feature Store.</p>
   </div>
 </div>
 
@@ -917,28 +1042,21 @@ response = <span class="fn">llm</span>(prompt)
   <h2><span class="section-num">2</span> A Standard Pipeline Architecture</h2>
   <p>A typical production ML pipeline has 6 stages:</p>
   <ol>
-    <li><strong>Data Ingestion</strong> — Pull from BigQuery, GCS, or external sources. Output: raw dataset artifact.</li>
-    <li><strong>Preprocessing</strong> — Clean, transform, feature engineering. Output: processed dataset artifact.</li>
-    <li><strong>Training</strong> — Train the model. Input: processed data. Output: model artifact.</li>
-    <li><strong>Evaluation</strong> — Score the model against a held-out test set. Output: metrics artifact.</li>
-    <li><strong>Conditional Deployment</strong> — Only deploy if new model beats baseline (metric threshold check). Output: deployed model endpoint.</li>
-    <li><strong>Monitoring Setup</strong> — Configure Vertex AI Model Monitoring on the new endpoint.</li>
+    <li><strong>Data Ingestion</strong> — Pull from BigQuery, GCS, or external sources</li>
+    <li><strong>Preprocessing</strong> — Clean, transform, feature engineering</li>
+    <li><strong>Training</strong> — Train the model; output: model artifact</li>
+    <li><strong>Evaluation</strong> — Score the model against a held-out test set</li>
+    <li><strong>Conditional Deployment</strong> — Only deploy if new model beats baseline</li>
+    <li><strong>Monitoring Setup</strong> — Configure Vertex AI Model Monitoring on the new endpoint</li>
   </ol>
-  
   <div class="code-block">
 <span class="cm"># Simplified KFP component definition</span>
 <span class="kw">from</span> kfp.v2 <span class="kw">import</span> dsl
 <span class="kw">from</span> kfp.v2.dsl <span class="kw">import</span> component, Output, Model, Metrics
 
 <span class="fn">@component</span>(base_image=<span class="str">"python:3.10"</span>, packages_to_install=[<span class="str">"scikit-learn"</span>])
-<span class="kw">def</span> <span class="fn">train_model</span>(
-    training_data_path: str,
-    model: Output[Model],
-    metrics: Output[Metrics],
-):
-    <span class="cm"># Training logic here</span>
+<span class="kw">def</span> <span class="fn">train_model</span>(training_data_path: str, model: Output[Model], metrics: Output[Metrics]):
     metrics.<span class="fn">log_metric</span>(<span class="str">"accuracy"</span>, <span class="num">0.94</span>)
-    <span class="cm"># Save model artifact</span>
 
 <span class="fn">@dsl.pipeline</span>(name=<span class="str">"rds-anomaly-pipeline"</span>)
 <span class="kw">def</span> <span class="fn">rds_pipeline</span>(project: str, region: str):
@@ -949,7 +1067,6 @@ response = <span class="fn">llm</span>(prompt)
     <span class="kw">with</span> dsl.<span class="fn">Condition</span>(evaluate.outputs[<span class="str">"accuracy"</span>] > <span class="num">0.90</span>):
         <span class="fn">deploy_model</span>(model=train.outputs[<span class="str">"model"</span>])
   </div>
-
   <div class="quickcheck" id="qc-5-1">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">In a Vertex AI Pipeline, what does the conditional deployment step (Condition) guard against?</div>
@@ -965,34 +1082,16 @@ response = <span class="fn">llm</span>(prompt)
 
 <div class="section">
   <h2><span class="section-num">3</span> Pipelines vs Cloud Run vs n8n</h2>
-  <p>This is a likely interview question. Know it cold.</p>
   <table class="compare-table">
     <tr><th>Tool</th><th>Purpose</th><th>ML Artifact Tracking</th><th>When to Use</th></tr>
-    <tr>
-      <td><strong>Vertex AI Pipelines</strong></td>
-      <td>ML lifecycle orchestration</td>
-      <td><span class="tag tag-green">Built-in</span></td>
-      <td>Reproducible, versioned, scheduled ML workflows</td>
-    </tr>
-    <tr>
-      <td><strong>Cloud Run</strong></td>
-      <td>Serving / inference APIs</td>
-      <td><span class="tag tag-red">None</span></td>
-      <td>Deploy model endpoints, build inference wrappers</td>
-    </tr>
-    <tr>
-      <td><strong>n8n / Cloud Workflows</strong></td>
-      <td>General workflow automation</td>
-      <td><span class="tag tag-red">None</span></td>
-      <td>Webhooks, integrations, ops automation — not ML lifecycle</td>
-    </tr>
+    <tr><td><strong>Vertex AI Pipelines</strong></td><td>ML lifecycle orchestration</td><td><span class="tag tag-green">Built-in</span></td><td>Reproducible, versioned, scheduled ML workflows</td></tr>
+    <tr><td><strong>Cloud Run</strong></td><td>Serving / inference APIs</td><td><span class="tag tag-red">None</span></td><td>Deploy model endpoints, build inference wrappers</td></tr>
+    <tr><td><strong>n8n / Cloud Workflows</strong></td><td>General workflow automation</td><td><span class="tag tag-red">None</span></td><td>Webhooks, integrations, ops automation — not ML lifecycle</td></tr>
   </table>
-  
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Your Context</div>
-    <p>You use n8n for operational automation (blog pipeline, motion tasks, calendar). That's the right tool for those jobs. If you were building a monthly model retraining workflow for the RDS anomaly detector — ingest new data, retrain, evaluate, gate on performance, deploy — that's the Vertex AI Pipelines use case. Different tools, different jobs.</p>
+    <p>You use n8n for operational automation (blog pipeline, motion tasks, calendar). That's the right tool for those jobs. If you were building a monthly model retraining workflow for the RDS anomaly detector — that's the Vertex AI Pipelines use case. Different tools, different jobs.</p>
   </div>
-
   <div class="quickcheck" id="qc-5-2">
     <h4>⚡ Quick Check</h4>
     <div class="qc-question">A customer wants to retrain their sales forecasting model every month using new data, evaluate it, and only deploy if accuracy improves. What's the right tool?</div>
@@ -1010,21 +1109,18 @@ response = <span class="fn">llm</span>(prompt)
   <h2><span class="section-num">4</span> Vertex AI Experiments</h2>
   <p>Experiments is Vertex AI's experiment tracking system. Every pipeline run logs:</p>
   <ul>
-    <li><strong>Parameters:</strong> hyperparameters used in this run (learning rate, batch size, model type)</li>
+    <li><strong>Parameters:</strong> hyperparameters used in this run</li>
     <li><strong>Metrics:</strong> performance results (accuracy, RMSE, F1)</li>
     <li><strong>Artifacts:</strong> lineage — which dataset produced which model, deployed where</li>
   </ul>
-  <p>This lets you compare runs side-by-side, reproduce any past run, and trace a deployed model back to the exact data and code that produced it.</p>
-  
   <div class="callout callout-warn">
     <div class="callout-label">⚠️ Why This Matters for Enterprise</div>
-    <p>In regulated industries (healthcare, finance), being able to explain <em>exactly</em> how a model was trained and what data it used isn't optional — it's required. Vertex AI Experiments + Pipeline lineage tracking makes this auditable. This is a strong point to make in an interview when discussing enterprise AI adoption.</p>
+    <p>In regulated industries (healthcare, finance), being able to explain exactly how a model was trained and what data it used isn't optional — it's required. Vertex AI Experiments + Pipeline lineage tracking makes this auditable. This is a strong point to make in an interview when discussing enterprise AI adoption.</p>
   </div>
 </div>
 
 <div class="section">
   <h2><span class="section-num">5</span> When to Recommend Pipelines</h2>
-  <p>Know the trigger conditions cold:</p>
   <ul>
     <li>The model needs to retrain on a schedule (daily, weekly, monthly)</li>
     <li>You need reproducibility — same inputs must produce same model</li>
@@ -1034,7 +1130,7 @@ response = <span class="fn">llm</span>(prompt)
   </ul>
   <div class="callout callout-scott">
     <div class="callout-label">🔮 Interview Move</div>
-    <p>"Vertex AI Pipelines is the difference between an ML experiment and an ML system. The experiment is a notebook that runs once. The system retrains, evaluates, gates, deploys, and monitors automatically — with full lineage tracking so you can audit every model in production back to the exact data that trained it. That's what enterprise customers need."</p>
+    <p>"Vertex AI Pipelines is the difference between an ML experiment and an ML system. The experiment is a notebook that runs once. The system retrains, evaluates, gates, deploys, and monitors automatically — with full lineage tracking so you can audit every model in production back to the exact data that trained it."</p>
   </div>
 </div>
 `,
@@ -1044,176 +1140,41 @@ response = <span class="fn">llm</span>(prompt)
 // QUIZ DATA
 // ============================================================
 const QUIZZES = {
-  1: {
-    questions: [
-      {
-        q: "A text embedding model converts text into:",
-        opts: ["A compressed zip file", "A high-dimensional vector capturing semantic meaning", "A hash of the token sequence", "A probability distribution over vocabulary"],
-        a: 1,
-        explain: "Embeddings are vectors (lists of numbers) that encode semantic meaning — similar text produces similar vectors."
-      },
-      {
-        q: "Why does Vertex AI Matching Engine use approximate nearest neighbor (ANN) rather than exact search?",
-        opts: ["Exact search isn't supported in GCP", "ANN produces better semantic matches", "At millions of vectors, exact search is too computationally expensive for production latency", "ANN is more accurate for short queries"],
-        a: 2,
-        explain: "Exact search requires comparing against every vector — O(n). At millions of vectors, this is too slow for real-time use. ANN indexes the space to find near-exact answers much faster."
-      },
-      {
-        q: "In RAG, what determines which chunks are returned to the LLM?",
-        opts: ["The length of each chunk", "Keyword matching between query and chunk", "Cosine similarity between query embedding and chunk embeddings", "The recency of the document"],
-        a: 2,
-        explain: "Both the query and the stored chunks are embedded. The chunks with the highest cosine similarity to the query vector are retrieved."
-      },
-      {
-        q: "Scott's RDS Knowledge Base uses pgvector instead of Vertex AI Matching Engine. What's the strongest justification for this choice?",
-        opts: ["pgvector is always better than Matching Engine", "At moderate vector counts, pgvector on Cloud SQL handles latency requirements without the operational overhead of a separate vector service", "pgvector supports more embedding dimensions", "Matching Engine doesn't support GCP"],
-        a: 1,
-        explain: "The pgvector choice is defensible at smaller scale. The key is knowing when to upgrade to Matching Engine (millions of vectors) and being able to articulate the trade-off."
-      },
-      {
-        q: "Which Google embedding model is optimized for enterprise retrieval on Vertex AI?",
-        opts: ["text-bison@002", "text-embedding-gecko", "gemini-embedding-001", "sentence-transformers/all-MiniLM"],
-        a: 1,
-        explain: "text-embedding-gecko is Vertex AI's production embedding model for semantic retrieval tasks."
-      },
-    ]
-  },
-  2: {
-    questions: [
-      {
-        q: "A fintech startup's customer support chatbot needs to answer questions about their proprietary product terms, which update monthly. What approach?",
-        opts: ["Fine-tune Gemini monthly on new terms", "RAG — store terms in a vector DB, retrieve at runtime, update docs monthly", "Zero-shot prompting with the full terms doc in every request", "BQML logistic regression classifier"],
-        a: 1,
-        explain: "RAG is designed for this: proprietary, frequently-changing data that isn't in the model's training set. No retraining required — just update the document store."
-      },
-      {
-        q: "A customer says 'we fine-tuned our model but it stopped being good at general tasks.' What happened?",
-        opts: ["Their training data was too large", "Catastrophic forgetting — fine-tuning on a narrow task can degrade general capabilities", "The model needs more epochs", "They should have used RAG instead"],
-        a: 1,
-        explain: "Catastrophic forgetting is a real risk in fine-tuning. The model improves on your specific task but loses broader capabilities. This is why evaluation on held-out general benchmarks is important alongside task-specific metrics."
-      },
-      {
-        q: "When does few-shot prompting outperform zero-shot?",
-        opts: ["When the model needs new knowledge it wasn't trained on", "When format consistency and style matching are critical and the model already knows the domain", "When context windows are too small for examples", "When the model is being fine-tuned simultaneously"],
-        a: 1,
-        explain: "Few-shot works best when the model has the knowledge but needs guidance on format or style. It won't help if the model lacks the underlying knowledge."
-      },
-      {
-        q: "What is Vertex AI Search?",
-        opts: ["A SERP competitor to Google Search", "Google's managed RAG product — handles ingestion, embedding, retrieval behind an API", "A fine-tuning interface for Gemini", "BigQuery's full-text search feature"],
-        a: 1,
-        explain: "Vertex AI Search is Google's managed RAG service. It abstracts the chunking, embedding, and retrieval pipeline so customers can get RAG without building infrastructure."
-      },
-      {
-        q: "A customer wants their AI to output responses in a very specific JSON schema consistently. Prompting has 70% reliability. What's next?",
-        opts: ["Accept 70% — that's industry standard", "Fine-tune on (input, expected JSON output) examples — behavioral consistency is a fine-tuning use case", "Switch to a different embedding model", "Add more documents to RAG"],
-        a: 1,
-        explain: "Output format consistency is a textbook fine-tuning use case. When prompting can't reliably produce the right structure, fine-tuning on labeled examples is the right next step."
-      },
-    ]
-  },
-  3: {
-    questions: [
-      {
-        q: "What is the key difference between BLEU and ROUGE metrics?",
-        opts: ["BLEU is for images; ROUGE is for text", "BLEU measures precision (generated vs reference); ROUGE measures recall (reference coverage in generated)", "BLEU is for translation only; ROUGE works for all tasks", "They are identical metrics with different names"],
-        a: 1,
-        explain: "BLEU measures precision — how much of the generated text appears in the reference. ROUGE measures recall — how much of the reference appears in the generated output. For summarization, you care more about ROUGE (did you capture the key points)."
-      },
-      {
-        q: "Scott's governance dashboard flags 'argus' and 'adlan' as showing critical drift. What mechanism is detecting this?",
-        opts: ["BLEU score comparison across sessions", "DNA fingerprinting — tracking 8 behavioral dimensions and comparing to established baseline", "Vertex AI Model Monitoring feature drift alerts", "Human review flagging inconsistencies"],
-        a: 1,
-        explain: "The governance dashboard uses behavioral fingerprinting across dimensions like hedge ratio, response length, and formality. Deviation from baseline triggers drift alerts."
-      },
-      {
-        q: "What is the primary limitation of LLM-as-judge evaluation?",
-        opts: ["It's too expensive to run at scale", "The judge model may share the same blind spots as the evaluated model, especially for domain-specific errors", "It only works for classification tasks", "It requires labeled ground truth data"],
-        a: 1,
-        explain: "LLM-as-judge is powerful but both models can be confidently wrong on domain-specific knowledge. The judge also tends to prefer longer, more elaborate responses regardless of correctness."
-      },
-      {
-        q: "A production AI chatbot has good offline evaluation scores but users keep complaining. What type of evaluation is missing?",
-        opts: ["Better held-out test sets", "Online evaluation — tracking real user behavior signals in production", "Higher-quality BLEU scoring", "More epochs in offline training"],
-        a: 1,
-        explain: "Offline evaluation only tells you how the model performs on test data. User complaints are a real-world signal that requires online evaluation — tracking abandonment rates, follow-up questions, explicit feedback."
-      },
-      {
-        q: "Vertex AI Model Monitoring is configured on a deployed endpoint. What does it monitor?",
-        opts: ["Code quality of inference scripts", "Feature distribution drift — comparing production input distributions against training baseline", "Cost per query over time", "Hallucination rates in model outputs"],
-        a: 1,
-        explain: "Vertex AI Model Monitoring compares the statistical distribution of production inputs against the training distribution. Significant drift triggers alerts, which can trigger retraining pipelines."
-      },
-    ]
-  },
-  4: {
-    questions: [
-      {
-        q: "What does ML.DETECT_ANOMALIES output that enables threshold-based alerting?",
-        opts: ["A classification label (normal/anomalous)", "An anomaly probability score for each data point", "A list of columns causing the anomaly", "The forecasted value only"],
-        a: 1,
-        explain: "ML.DETECT_ANOMALIES returns an anomaly probability score (0-1) per data point. You set a threshold (e.g., 0.9) and flag anything above it. This lets you tune sensitivity."
-      },
-      {
-        q: "You have 90 days of hourly ticket volume data from 50 restaurant locations. Which BQML feature makes this scalable?",
-        opts: ["auto_arima=TRUE splits data automatically", "time_series_id_col — trains one model per location in a single CREATE MODEL call", "AUTOML handles multi-location automatically", "K-MEANS clusters locations by volume"],
-        a: 1,
-        explain: "The time_series_id_col parameter tells BQML to train separate models for each unique ID (each location) in a single query. This scales ARIMA_PLUS to multi-tenant datasets."
-      },
-      {
-        q: "An operations team has 20 metrics they want to monitor for anomalies simultaneously (CPU, memory, response time, error rate, etc.). ARIMA_PLUS or Isolation Forest?",
-        opts: ["ARIMA_PLUS — it handles multiple metrics in one model", "Isolation Forest — designed for high-dimensional multi-feature anomaly detection", "Both are equivalent for this use case", "Neither — use K-MEANS clustering instead"],
-        a: 1,
-        explain: "Isolation Forest handles high-dimensional inputs where anomalies are combinations of features. ARIMA_PLUS is single time-series per call — better for one metric with known seasonality."
-      },
-      {
-        q: "Why does BigQuery ML's ML.EVALUATE step matter before running ML.DETECT_ANOMALIES in production?",
-        opts: ["EVALUATE is required by BigQuery syntax", "It validates model quality — poor RMSE/MAPE means your anomaly scores will be unreliable", "EVALUATE trains the final model parameters", "It generates the anomaly threshold automatically"],
-        a: 1,
-        explain: "EVALUATE tests your model on held-out data. If MAPE (mean absolute percentage error) is high, your forecasts are off, which means your anomaly detection will have high false positives or miss real anomalies."
-      },
-      {
-        q: "What is the 'rule engines for the known, ML for the unknown' principle in the context of RDS ops monitoring?",
-        opts: ["Use rules for ML pipelines, ML for operational rules", "Rules handle deterministic known failure conditions; ML detects subtle, pattern-based anomalies that rules can't anticipate", "Always prefer ML over static rules", "BigQuery rules replace the ML step"],
-        a: 1,
-        explain: "Rules catch the obvious stuff you already know about — if ticket_count > 500, alert. ML catches the subtle drift you don't have a rule for yet — unusual patterns that deviate from historical baselines."
-      },
-    ]
-  },
-  5: {
-    questions: [
-      {
-        q: "What is the fundamental unit of a Vertex AI Pipeline?",
-        opts: ["A Python script", "A container image", "A component — a containerized, reusable step with defined inputs and outputs", "A BigQuery table"],
-        a: 2,
-        explain: "Components are the building blocks. Each component is a containerized function with typed inputs and outputs (artifacts). Connecting components creates a pipeline DAG."
-      },
-      {
-        q: "A team runs a monthly retraining pipeline. The new model has lower accuracy than the current deployed model. What should happen?",
-        opts: ["Deploy it anyway — new data is always better", "The conditional deployment step catches this and skips deployment, keeping the current model live", "Roll back to the previous training run", "File a bug in the pipeline code"],
-        a: 1,
-        explain: "The conditional deployment step (dsl.Condition) gates on a metric threshold. If the new model doesn't beat the baseline accuracy, the deploy component doesn't run."
-      },
-      {
-        q: "What does Vertex AI Experiments track that basic Cloud Logging doesn't?",
-        opts: ["HTTP request logs", "Model artifacts, metrics, and parameters with full lineage — connecting each model to the exact data and code that produced it", "Container startup times", "BigQuery query costs"],
-        a: 1,
-        explain: "Experiments provides structured tracking of ML metadata — hyperparameters, metrics, and artifact lineage. This makes models auditable and reproducible in ways that logs alone cannot."
-      },
-      {
-        q: "A customer says they already use n8n for workflow automation and asks if they can use it for their monthly model retraining pipeline. What do you say?",
-        opts: ["Yes — n8n can handle any workflow including ML", "n8n is great for operational automation, but for ML retraining you want Vertex AI Pipelines — it has built-in artifact tracking, model lineage, and integrations with Model Registry that n8n doesn't provide", "n8n is deprecated on GCP — they must use Pipelines", "It depends on the model size"],
-        a: 1,
-        explain: "n8n is a general automation tool. Vertex AI Pipelines is ML-specific with artifact tracking, experiment logging, and native GCP ML service integrations. Different tools, different jobs."
-      },
-      {
-        q: "In the KFP syntax used by Vertex AI Pipelines, what does the @component decorator do?",
-        opts: ["Marks a function as a Cloud Run endpoint", "Converts a Python function into a containerized, reusable pipeline component with defined I/O", "Registers the function with BigQuery ML", "Enables GPU acceleration for that step"],
-        a: 1,
-        explain: "@component wraps a Python function into a Kubeflow Pipeline component — it handles containerization, I/O serialization, and makes the function usable as a step in a pipeline DAG."
-      },
-    ]
-  }
+  1: { questions: [
+    { q: "A text embedding model converts text into:", opts: ["A compressed zip file", "A high-dimensional vector capturing semantic meaning", "A hash of the token sequence", "A probability distribution over vocabulary"], a: 1, explain: "Embeddings are vectors (lists of numbers) that encode semantic meaning — similar text produces similar vectors." },
+    { q: "Why does Vertex AI Matching Engine use approximate nearest neighbor (ANN) rather than exact search?", opts: ["Exact search isn't supported in GCP", "ANN produces better semantic matches", "At millions of vectors, exact search is too computationally expensive for production latency", "ANN is more accurate for short queries"], a: 2, explain: "Exact search requires comparing against every vector — O(n). At millions of vectors, this is too slow for real-time use." },
+    { q: "In RAG, what determines which chunks are returned to the LLM?", opts: ["The length of each chunk", "Keyword matching between query and chunk", "Cosine similarity between query embedding and chunk embeddings", "The recency of the document"], a: 2, explain: "Both the query and the stored chunks are embedded. The chunks with the highest cosine similarity to the query vector are retrieved." },
+    { q: "Scott's RDS Knowledge Base uses pgvector instead of Vertex AI Matching Engine. What's the strongest justification?", opts: ["pgvector is always better than Matching Engine", "At moderate vector counts, pgvector on Cloud SQL handles latency requirements without the operational overhead of a separate vector service", "pgvector supports more embedding dimensions", "Matching Engine doesn't support GCP"], a: 1, explain: "The pgvector choice is defensible at smaller scale. The key is knowing when to upgrade to Matching Engine (millions of vectors)." },
+    { q: "Which Google embedding model is optimized for enterprise retrieval on Vertex AI?", opts: ["text-bison@002", "text-embedding-gecko", "gemini-embedding-001", "sentence-transformers/all-MiniLM"], a: 1, explain: "text-embedding-gecko is Vertex AI's production embedding model for semantic retrieval tasks." },
+  ]},
+  2: { questions: [
+    { q: "A fintech startup's customer support chatbot needs to answer questions about their proprietary product terms, which update monthly. What approach?", opts: ["Fine-tune Gemini monthly on new terms", "RAG — store terms in a vector DB, retrieve at runtime, update docs monthly", "Zero-shot prompting with the full terms doc in every request", "BQML logistic regression classifier"], a: 1, explain: "RAG is designed for this: proprietary, frequently-changing data that isn't in the model's training set. No retraining required." },
+    { q: "A customer says 'we fine-tuned our model but it stopped being good at general tasks.' What happened?", opts: ["Their training data was too large", "Catastrophic forgetting — fine-tuning on a narrow task can degrade general capabilities", "The model needs more epochs", "They should have used RAG instead"], a: 1, explain: "Catastrophic forgetting is a real risk in fine-tuning. The model improves on your specific task but loses broader capabilities." },
+    { q: "When does few-shot prompting outperform zero-shot?", opts: ["When the model needs new knowledge it wasn't trained on", "When format consistency and style matching are critical and the model already knows the domain", "When context windows are too small for examples", "When the model is being fine-tuned simultaneously"], a: 1, explain: "Few-shot works best when the model has the knowledge but needs guidance on format or style." },
+    { q: "What is Vertex AI Search?", opts: ["A SERP competitor to Google Search", "Google's managed RAG product — handles ingestion, embedding, retrieval behind an API", "A fine-tuning interface for Gemini", "BigQuery's full-text search feature"], a: 1, explain: "Vertex AI Search is Google's managed RAG service. It abstracts the chunking, embedding, and retrieval pipeline." },
+    { q: "A customer wants their AI to output responses in a very specific JSON schema consistently. Prompting has 70% reliability. What's next?", opts: ["Accept 70% — that's industry standard", "Fine-tune on (input, expected JSON output) examples — behavioral consistency is a fine-tuning use case", "Switch to a different embedding model", "Add more documents to RAG"], a: 1, explain: "Output format consistency is a textbook fine-tuning use case." },
+  ]},
+  3: { questions: [
+    { q: "What is the key difference between BLEU and ROUGE metrics?", opts: ["BLEU is for images; ROUGE is for text", "BLEU measures precision (generated vs reference); ROUGE measures recall (reference coverage in generated)", "BLEU is for translation only; ROUGE works for all tasks", "They are identical metrics with different names"], a: 1, explain: "BLEU measures precision — how much of the generated text appears in the reference. ROUGE measures recall." },
+    { q: "Scott's governance dashboard flags 'argus' and 'adlan' as showing critical drift. What mechanism is detecting this?", opts: ["BLEU score comparison across sessions", "DNA fingerprinting — tracking 8 behavioral dimensions and comparing to established baseline", "Vertex AI Model Monitoring feature drift alerts", "Human review flagging inconsistencies"], a: 1, explain: "The governance dashboard uses behavioral fingerprinting across dimensions like hedge ratio, response length, and formality." },
+    { q: "What is the primary limitation of LLM-as-judge evaluation?", opts: ["It's too expensive to run at scale", "The judge model may share the same blind spots as the evaluated model, especially for domain-specific errors", "It only works for classification tasks", "It requires labeled ground truth data"], a: 1, explain: "LLM-as-judge is powerful but both models can be confidently wrong on domain-specific knowledge." },
+    { q: "A production AI chatbot has good offline evaluation scores but users keep complaining. What type of evaluation is missing?", opts: ["Better held-out test sets", "Online evaluation — tracking real user behavior signals in production", "Higher-quality BLEU scoring", "More epochs in offline training"], a: 1, explain: "Offline evaluation only tells you how the model performs on test data. User complaints are a real-world signal that requires online evaluation." },
+    { q: "Vertex AI Model Monitoring is configured on a deployed endpoint. What does it monitor?", opts: ["Code quality of inference scripts", "Feature distribution drift — comparing production input distributions against training baseline", "Cost per query over time", "Hallucination rates in model outputs"], a: 1, explain: "Vertex AI Model Monitoring compares the statistical distribution of production inputs against the training distribution." },
+  ]},
+  4: { questions: [
+    { q: "What does ML.DETECT_ANOMALIES output that enables threshold-based alerting?", opts: ["A classification label (normal/anomalous)", "An anomaly probability score for each data point", "A list of columns causing the anomaly", "The forecasted value only"], a: 1, explain: "ML.DETECT_ANOMALIES returns an anomaly probability score (0-1) per data point. You set a threshold (e.g., 0.9) and flag anything above it." },
+    { q: "You have 90 days of hourly ticket volume data from 50 restaurant locations. Which BQML feature makes this scalable?", opts: ["auto_arima=TRUE splits data automatically", "time_series_id_col — trains one model per location in a single CREATE MODEL call", "AUTOML handles multi-location automatically", "K-MEANS clusters locations by volume"], a: 1, explain: "The time_series_id_col parameter tells BQML to train separate models for each unique ID in a single query." },
+    { q: "An operations team has 20 metrics they want to monitor for anomalies simultaneously. ARIMA_PLUS or Isolation Forest?", opts: ["ARIMA_PLUS — it handles multiple metrics in one model", "Isolation Forest — designed for high-dimensional multi-feature anomaly detection", "Both are equivalent for this use case", "Neither — use K-MEANS clustering instead"], a: 1, explain: "Isolation Forest handles high-dimensional inputs where anomalies are combinations of features. ARIMA_PLUS is single time-series per call." },
+    { q: "Why does BigQuery ML's ML.EVALUATE step matter before running ML.DETECT_ANOMALIES in production?", opts: ["EVALUATE is required by BigQuery syntax", "It validates model quality — poor RMSE/MAPE means your anomaly scores will be unreliable", "EVALUATE trains the final model parameters", "It generates the anomaly threshold automatically"], a: 1, explain: "EVALUATE tests your model on held-out data. If MAPE is high, your forecasts are off, which means your anomaly detection will have high false positives." },
+    { q: "What is the 'rule engines for the known, ML for the unknown' principle in the context of RDS ops monitoring?", opts: ["Use rules for ML pipelines, ML for operational rules", "Rules handle deterministic known failure conditions; ML detects subtle, pattern-based anomalies that rules can't anticipate", "Always prefer ML over static rules", "BigQuery rules replace the ML step"], a: 1, explain: "Rules catch the obvious stuff you already know about. ML catches the subtle drift you don't have a rule for yet." },
+  ]},
+  5: { questions: [
+    { q: "What is the fundamental unit of a Vertex AI Pipeline?", opts: ["A Python script", "A container image", "A component — a containerized, reusable step with defined inputs and outputs", "A BigQuery table"], a: 2, explain: "Components are the building blocks. Each component is a containerized function with typed inputs and outputs." },
+    { q: "A team runs a monthly retraining pipeline. The new model has lower accuracy than the current deployed model. What should happen?", opts: ["Deploy it anyway — new data is always better", "The conditional deployment step catches this and skips deployment, keeping the current model live", "Roll back to the previous training run", "File a bug in the pipeline code"], a: 1, explain: "The conditional deployment step (dsl.Condition) gates on a metric threshold. If the new model doesn't beat the baseline, the deploy component doesn't run." },
+    { q: "What does Vertex AI Experiments track that basic Cloud Logging doesn't?", opts: ["HTTP request logs", "Model artifacts, metrics, and parameters with full lineage — connecting each model to the exact data and code that produced it", "Container startup times", "BigQuery query costs"], a: 1, explain: "Experiments provides structured tracking of ML metadata — hyperparameters, metrics, and artifact lineage." },
+    { q: "A customer says they already use n8n and asks if they can use it for their monthly model retraining pipeline. What do you say?", opts: ["Yes — n8n can handle any workflow including ML", "n8n is great for operational automation, but for ML retraining you want Vertex AI Pipelines — it has built-in artifact tracking, model lineage, and integrations with Model Registry that n8n doesn't provide", "n8n is deprecated on GCP — they must use Pipelines", "It depends on the model size"], a: 1, explain: "n8n is a general automation tool. Vertex AI Pipelines is ML-specific with artifact tracking, experiment logging, and native GCP ML service integrations." },
+    { q: "In the KFP syntax used by Vertex AI Pipelines, what does the @component decorator do?", opts: ["Marks a function as a Cloud Run endpoint", "Converts a Python function into a containerized, reusable pipeline component with defined I/O", "Registers the function with BigQuery ML", "Enables GPU acceleration for that step"], a: 1, explain: "@component wraps a Python function into a Kubeflow Pipeline component — it handles containerization, I/O serialization, and makes the function usable as a pipeline step." },
+  ]},
 };
 
 // ============================================================
@@ -1226,19 +1187,23 @@ function openModule(moduleId) {
   setModuleState(moduleId, { visited: true, lastVisited: Date.now() });
 
   const meta = MODULES_META.find(m => m.id === moduleId);
-  const ms = getModuleState(moduleId);
 
-  // Check for recall
+  renderSidebarModule(moduleId);
+
+  // Recall question
   let recallHTML = '';
   if (moduleId >= 2) {
     const recall = getRecallQuestion(moduleId);
     if (recall) {
-      const optsHTML = recall.opts.map((o, i) => 
+      const optsHTML = recall.opts.map((o, i) =>
         `<div class="qc-option" onclick="checkRecall(this, 'recall-qc', ${i === recall.a})">${o}</div>`
       ).join('');
       recallHTML = `
         <div class="recall-card">
-          <div class="recall-header">🧠 Before we start Module ${moduleId} — Quick recall from Module ${recall.fromModule}</div>
+          <div class="recall-header">
+            <span class="recall-badge">Knowledge Check</span>
+            <span class="recall-from">From Module ${recall.fromModule}</span>
+          </div>
           <div class="recall-q">${recall.q}</div>
           <div class="qc-options" id="recall-opts">${optsHTML}</div>
           <div class="qc-feedback" id="recall-qc-feedback"></div>
@@ -1247,7 +1212,7 @@ function openModule(moduleId) {
     }
   }
 
-  // Build quiz HTML
+  // Quiz
   const quiz = QUIZZES[moduleId];
   const quizQsHTML = quiz.questions.map((q, qi) => `
     <div class="quiz-question" id="qq-${qi}">
@@ -1256,26 +1221,41 @@ function openModule(moduleId) {
     </div>
   `).join('');
 
+  const ms = getModuleState(moduleId);
+  const passBannerHTML = ms.quizPassed ? `
+    <div class="quiz-pass-banner">
+      <div class="qpb-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div><div class="qpb-title">Quiz Passed</div><div class="qpb-sub">Score: ${ms.quizScore}/5 — Module complete</div></div>
+    </div>` : '';
+
   view.innerHTML = `
-    <div class="module-view">
-      <button class="back-btn" onclick="renderHome()">← Back to Course</button>
-      ${recallHTML}
-      <div class="module-header">
-        <div class="module-badge">Module ${moduleId}</div>
-        <h1>${meta.title}</h1>
-        <div class="subtitle">~${meta.time} · ${meta.desc}</div>
+    <div>
+      <div class="breadcrumb">
+        <span class="bc-item bc-link" onclick="renderHome()">Course</span>
+        <span class="bc-sep">›</span>
+        <span class="bc-item bc-current">Module ${moduleId}</span>
       </div>
 
-      <div class="audio-card">
+      ${recallHTML}
+
+      <div class="mod-badge">Module ${moduleId} of 5</div>
+      <div class="mod-h1">${meta.title}</div>
+      <div class="mod-subtitle">~${meta.time} · ${meta.desc}</div>
+
+      ${passBannerHTML}
+
+      <div class="audio-player">
         <div class="audio-icon">
           <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
         <div class="audio-info">
-          <div class="audio-title">Module ${moduleId} Audio Intro</div>
-          <div class="audio-desc">60-90 second spoken overview — hit play before reading</div>
+          <div class="audio-eyebrow">Module ${moduleId} Audio Intro</div>
+          <div class="audio-title-text">Hit play before reading — 60-90 second overview</div>
           <audio controls preload="none">
             <source src="audio/module-${moduleId}-intro.mp3" type="audio/mpeg">
-            <span style="color:var(--text2);font-size:13px">Audio not available</span>
+            <span style="color:#5f6368;font-size:13px">Audio not available</span>
           </audio>
         </div>
       </div>
@@ -1286,7 +1266,11 @@ function openModule(moduleId) {
 
       <div class="quiz-section">
         <div class="quiz-header">
-          <h3>Module ${moduleId} Quiz</h3>
+          <div class="quiz-header-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Module Quiz
+          </div>
+          <h3>Module ${moduleId} Assessment</h3>
           <p>Answer all 5 questions. Pass 3/5 to unlock the next module.</p>
         </div>
         <div id="quiz-questions">${quizQsHTML}</div>
@@ -1296,12 +1280,20 @@ function openModule(moduleId) {
     </div>
   `;
 
-  // Track quiz answers
   window.currentQuizAnswers = {};
   window.currentModuleId = moduleId;
-
-  // Scroll to top
+  window.quizSubmitted = false;
   window.scrollTo(0, 0);
+
+  updateTopBar();
+}
+
+function updateTopBar() {
+  const score = getReadinessScore();
+  const pct = getOverallPct();
+  document.getElementById('nav-score').textContent = score;
+  document.getElementById('top-progress-fill').style.width = pct + '%';
+  document.getElementById('top-progress-pct').textContent = pct + '%';
 }
 
 // ============================================================
@@ -1336,7 +1328,6 @@ function selectQuizOption(el, questionIdx, optionIdx) {
   qq.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   window.currentQuizAnswers[questionIdx] = optionIdx;
-  
   const quiz = QUIZZES[window.currentModuleId];
   const allAnswered = quiz.questions.every((_, i) => window.currentQuizAnswers[i] !== undefined);
   document.getElementById('quiz-submit-btn').disabled = !allAnswered;
@@ -1345,10 +1336,8 @@ function selectQuizOption(el, questionIdx, optionIdx) {
 function submitQuiz(moduleId) {
   if (window.quizSubmitted) return;
   window.quizSubmitted = true;
-  
   const quiz = QUIZZES[moduleId];
   let correct = 0;
-  
   quiz.questions.forEach((q, qi) => {
     const userAns = window.currentQuizAnswers[qi];
     const qq = document.getElementById(`qq-${qi}`);
@@ -1362,31 +1351,24 @@ function submitQuiz(moduleId) {
     }
     if (userAns === q.a) correct++;
   });
-  
   document.getElementById('quiz-submit-btn').style.display = 'none';
   const passed = correct >= 3;
   const result = document.getElementById('quiz-result');
   result.className = 'quiz-result show';
-  
-  setModuleState(moduleId, { 
-    completed: true, 
-    quizPassed: passed, 
-    quizScore: correct 
-  });
-
+  setModuleState(moduleId, { completed: true, quizPassed: passed, quizScore: correct });
+  updateTopBar();
   let resultBtn = '';
   if (passed && moduleId < 5) {
     resultBtn = `<button class="quiz-result-btn" onclick="renderHome()">Unlock Module ${moduleId + 1} →</button>`;
   } else if (passed && moduleId === 5) {
     resultBtn = `<button class="quiz-result-btn" style="background:var(--blue)" onclick="renderHome()">🎉 Course Complete — View Results</button>`;
   } else {
-    resultBtn = `<button class="quiz-result-btn" style="background:var(--yellow);color:#000" onclick="retakeQuiz(${moduleId})">Review & Retry</button>`;
+    resultBtn = `<button class="quiz-result-btn" style="background:var(--yellow);color:#202124" onclick="retakeQuiz(${moduleId})">Review &amp; Retry</button>`;
   }
-  
   result.innerHTML = `
     <div class="quiz-result-score ${passed ? 'pass' : 'fail'}">${correct}/5</div>
-    <div class="quiz-result-msg">${passed 
-      ? (moduleId < 5 ? '✓ Passed. Next module unlocked.' : '🎉 Course complete. You\'re interview-ready.') 
+    <div class="quiz-result-msg">${passed
+      ? (moduleId < 5 ? '✓ Passed. Next module unlocked.' : '🎉 Course complete. You\'re interview-ready.')
       : `Need 3/5 to pass. You got ${correct}. Review the content and try again.`
     }</div>
     ${resultBtn}
